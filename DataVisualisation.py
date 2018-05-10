@@ -20,9 +20,16 @@ def data_visualization():
         trip_num += 1
         #print trip_num, row
 
-        timeStamps = row[0]
-        longtitutes = row[1]
-        latitudes = row[2]
+        timeStamps = []
+        longtitutes = []
+        latitudes = []
+        for trajectories in row:
+            timeStamps.append(trajectories[0])
+            #print timeStamps
+            longtitutes.append(trajectories[1])
+            #print longtitutes
+            latitudes.append(trajectories[2])
+            #print latitudes
 
         gmap = gmplot.GoogleMapPlotter(latitudes[(len(latitudes)/2)+1], longtitutes[(len(longtitutes)/2)+1], 0)
 
