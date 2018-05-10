@@ -20,17 +20,18 @@ def data_visualization():
         trip_num += 1
         #print trip_num, row
 
-        for traj_set in row:
-            print traj_set
+        timeStamps = row[0]
+        longtitutes = row[1]
+        latitudes = row[2]
 
-            gmap = gmplot.GoogleMapPlotter(traj_set[0], traj_set[1], traj_set[2])
+        gmap = gmplot.GoogleMapPlotter(latitudes[(len(latitudes)/2)+1], longtitutes[(len(longtitutes)/2)+1], 0)
 
-            # gmap.plot(latitudes, longitudes, 'cornflowerblue', edge_width=10)
-            # gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
-            # gmap.scatter(marker_lats, marker_lngs, 'k', marker=True)
-            # #gmap.heatmap(heat_lats, heat_lngs)
+        gmap.plot(latitudes, longtitutes, 'cornflowerblue', edge_width=10)
+        # gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
+        # gmap.scatter(marker_lats, marker_lngs, 'k', marker=True)
+        # gmap.heatmap(heat_lats, heat_lngs)
 
-            gmap.draw("Resources/maps/TripMap" + trip_num.__str__() + ".png")
+        gmap.draw("Resources/maps/TripMap" + trip_num.__str__() + ".png")
 
 
 if __name__ == '__main__':
