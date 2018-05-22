@@ -1,13 +1,12 @@
-import gmplot
 import pandas as pd
-import numpy as np
 from ast import literal_eval
+from SupportFuncs import GmPlot, GetTrajectorySets
 
 
 def data_visualization():
 
     trainSet = pd.read_csv(
-        'Resources/train_set.csv',
+        'Resources/DataSets/train_set.csv',
         converters={"Trajectory": literal_eval},
         index_col='tripId'
     )
@@ -17,33 +16,22 @@ def data_visualization():
 
     trip_num = 0
     i=0
+
     for row in trainSet['Trajectory']:
         #print trip_num, row
 
-        if(trip_num==5):break
+        if ( trip_num == 5 ):
+            break
 
         timeStamps = []
         longtitutes = []
         latitudes = []
-        if(i%7==1):
-            for trajectories in row:
-                timeStamps.append(trajectories[0])
-                #print timeStamps
-                longtitutes.append(trajectories[1])
-                #print longtitutes
-                latitudes.append(trajectories[2])
-                #print latitudes
 
-            gmap = gmplot.GoogleMapPlotter(np.mean(latitudes), np.mean(longtitutes), 12)
-
-            gmap.plot(latitudes, longtitutes, 'cornflowerblue', edge_width=10)
-            # gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
-            # gmap.scatter(marker_lats, marker_lngs, 'k', marker=True)
-            # gmap.heatmap(heat_lats, heat_lngs)
-
-            gmap.draw("Resources/maps/TripMap" + i.__str__() + ".html")
-
+        if ( i%7 == 1 ) :
+            timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(row, timeStamps, longtitutes, latitudes)
+            GmPlot.gmPlot(latitudes, longtitutes, "TripMap" + i.__str__())
             trip_num += 1
+
         i += 1
 
 
