@@ -29,7 +29,7 @@ def data_visualization():
 
         if ( i%7 == 1 ) :
             timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(row, timeStamps, longtitutes, latitudes)
-            GmPlot.gmPlot(latitudes, longtitutes, "TripMap" + i.__str__())
+            GmPlot.gmPlot(latitudes, longtitutes, "Resources/maps/TripMap" + i.__str__() + ".html")
             trip_num += 1
 
         i += 1

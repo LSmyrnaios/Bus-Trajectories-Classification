@@ -3,7 +3,10 @@ import collections
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy import shape
+from scipy.spatial.distance import squareform
 from scipy.stats import mode
+from math import radians, cos, sin, asin, sqrt
 
 
 try:
@@ -53,6 +56,25 @@ class KnnDtw(object):
         self.x = x
         self.l = l
 
+
+    # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
+    def haversine(self, lon1, lat1, lon2, lat2):
+        """
+        Calculate the great circle distance between two points
+        on the earth (specified in decimal degrees)
+        """
+        # convert decimal degrees to radians
+        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+        # haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+        c = 2 * asin(sqrt(a))
+        r = 6371  # Radius of earth in kilometers. Use 3956 for miles
+        return c * r
+
+
     def _dtw_distance(self, ts_a, ts_b, d=lambda x, y: abs(x - y)):
         """Returns the DTW similarity distance between two 2-D
         timeseries numpy arrays.
@@ -76,25 +98,49 @@ class KnnDtw(object):
         # Create cost matrix via broadcasting with large int
         ts_a, ts_b = np.array(ts_a), np.array(ts_b)
         M, N = len(ts_a), len(ts_b)
-        cost = sys.maxint * np.ones((M, N))
 
+        #print '1) Array1 len: ' + M.__str__() + ' Array2 len: ' + N.__str__()
+        #print '2) Array1 len: ' + ts_a.shape.__str__() + ' Array2 len: ' + ts_b.shape.__str__()
+        cost = sys.maxint * np.ones((M, N))
+        # # Time
+        # # Initialize the first row and column
+        # cost[0, 0] = d(ts_a[0][0], ts_b[0][0])
+        # for i in xrange(1, M):
+        #      cost[i, 0] = cost[i - 1, 0] + d(ts_a[i][0], ts_b[0][0])
+        #
+        # for j in xrange(1, N):
+        #     cost[0, j] = cost[0, j - 1] + d(ts_a[0][0], ts_b[j][0])
+        #
+        # # Populate rest of cost matrix within window
+        # for i in xrange(1, M):
+        #     for j in xrange(max(1, i - self.max_warping_window),
+        #                     min(N, i + self.max_warping_window)):
+        #         choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
+        #         cost[i, j] = min(choices) + d(ts_a[i][0], ts_b[j][0])
+        #
+        # # Return DTW distance given window
+        # return cost[-1, -1]
+
+        # Distance
         # Initialize the first row and column
-        cost[0, 0] = d(ts_a[0], ts_b[0])
+        cost[0, 0] = self.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
+        print cost[0,0]
         for i in xrange(1, M):
-            cost[i, 0] = cost[i - 1, 0] + d(ts_a[i], ts_b[0])
+            cost[i, 0] = cost[i - 1, 0] + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
 
         for j in xrange(1, N):
-            cost[0, j] = cost[0, j - 1] + d(ts_a[0], ts_b[j])
+            cost[0, j] = cost[0, j - 1] + self.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
 
         # Populate rest of cost matrix within window
         for i in xrange(1, M):
-            for j in xrange(max(1, i - self.max_warping_window),
-                            min(N, i + self.max_warping_window)):
+             for j in xrange(1, N): # max(1, i - self.max_warping_window), min(N, i + self.max_warping_window)
                 choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
-                cost[i, j] = min(choices) + d(ts_a[i], ts_b[j])
+                cost[i, j] = min(choices) + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
 
         # Return DTW distance given window
         return cost[-1, -1]
+
+
 
     def _dist_matrix(self, x, y):
         """Computes the M x N distance matrix between the training
@@ -135,7 +181,7 @@ class KnnDtw(object):
             dm = squareform(dm)
             return dm
 
-        # Compute full distance matrix of dtw distnces between x and y
+        # Compute full distance matrix of dtw distances between x and y
         else:
             x_s = np.shape(x)
             y_s = np.shape(y)
@@ -146,8 +192,7 @@ class KnnDtw(object):
 
             for i in xrange(0, x_s[0]):
                 for j in xrange(0, y_s[0]):
-                    dm[i, j] = self._dtw_distance(x[i, ::self.subsample_step],
-                                                  y[j, ::self.subsample_step])
+                    dm[i, j] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
                     # Update progress bar
                     dm_count += 1
                     p.animate(dm_count)
@@ -172,18 +217,18 @@ class KnnDtw(object):
 
         dm = self._dist_matrix(x, self.x)
 
-        # Identify the k nearest neighbors
-        knn_idx = dm.argsort()[:, :self.n_neighbors]
-
-        # Identify k nearest labels
-        knn_labels = self.l[knn_idx]
-
-        # Model Label
-        mode_data = mode(knn_labels, axis=1)
-        mode_label = mode_data[0]
-        mode_proba = mode_data[1] / self.n_neighbors
-
-        return mode_label.ravel(), mode_proba.ravel()
+        # # Identify the k nearest neighbors
+        # knn_idx = dm.argsort()[:, :self.n_neighbors]
+        #
+        # # Identify k nearest labels
+        # knn_labels = self.l[knn_idx]
+        #
+        # # Model Label
+        # mode_data = mode(knn_labels, axis=1)
+        # mode_label = mode_data[0]
+        # mode_proba = mode_data[1] / self.n_neighbors
+        #
+        # return mode_label.ravel(), mode_proba.ravel()
 
 
 class ProgressBar:
