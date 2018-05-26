@@ -124,7 +124,7 @@ class KnnDtw(object):
         # Distance
         # Initialize the first row and column
         cost[0, 0] = self.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
-        print cost[0,0]
+        # print cost[0,0] # DEBUG!
         for i in xrange(1, M):
             cost[i, 0] = cost[i - 1, 0] + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
 
@@ -139,7 +139,6 @@ class KnnDtw(object):
 
         # Return DTW distance given window
         return cost[-1, -1]
-
 
 
     def _dist_matrix(self, x, y):
