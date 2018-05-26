@@ -170,9 +170,7 @@ class KnnDtw(object):
 
             for i in xrange(0, x_s[0] - 1):
                 for j in xrange(i + 1, x_s[0]):
-                    dm[dm_count] = self._dtw_distance(x[i, ::self.subsample_step],
-                                                      y[j, ::self.subsample_step])
-
+                    dm[dm_count] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
                     dm_count += 1
                     p.animate(dm_count)
 

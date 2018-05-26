@@ -1,26 +1,18 @@
-import pandas as pd
-from ast import literal_eval
+import time
 from KNNwithDTW import KnnDtw
-from SupportFuncs import GmPlot, GetTrajectorySets
+from SupportMethods import GmPlot, GetTrajectorySets, readDatasets
 
 
 def findKearestNeighbors():
 
     # Combine code and find nearest neighbors!
 
-    trainSet = pd.read_csv('../Resources/DataSets/train_set.csv',
-        converters={"Trajectory": literal_eval},
-        index_col='tripId'
-    )
+    dataSets = readDatasets.read_dataset(True, True, False)
 
-    print "Finished loading train."
+    trainSet = dataSets[0]
+    testSetA1 = dataSets[1]
 
-    testSetA1 = pd.read_csv('../Resources/DataSets/test_set_a1.csv',
-        converters={"Trajectory": literal_eval},
-        sep="\t"
-    )
-
-    print "Finished loading test."
+    start_time = time.time()
 
     i=0
     min_cost = 0
@@ -98,6 +90,8 @@ def findKearestNeighbors():
 
         timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(trainSet['Trajectory'][min_i], timeStamps, longtitutes, latitudes)
         GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/sample" + testNum.__str__() + "-train.html")
+
+    print "Elapsed time of KNNwithDTW for 'test_set_a1': ", time.time() - start_time
 
 
 if __name__ == '__main__':
