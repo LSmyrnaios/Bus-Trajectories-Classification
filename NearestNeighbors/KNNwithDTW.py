@@ -72,7 +72,9 @@ class KnnDtw(object):
         a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
         c = 2 * asin(sqrt(a))
         r = 6371  # Radius of earth in kilometers. Use 3956 for miles
-        return c * r
+        distance = c * r
+        # print "Calculating distance bewteen (lon1, lat1)", lon1, lat1, " and (lon2, lat2)", lon2, lat2, ". Distance: ", distance, "\n"
+        return distance
 
 
     def _dtw_distance(self, ts_a, ts_b, d=lambda x, y: abs(x - y)):
@@ -123,13 +125,31 @@ class KnnDtw(object):
 
         # Distance
         # Initialize the first row and column
-        cost[0, 0] = self.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
-        # print cost[0,0] # DEBUG!
-        for i in xrange(1, M):
-            cost[i, 0] = cost[i - 1, 0] + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
 
-        for j in xrange(1, N):
-            cost[0, j] = cost[0, j - 1] + self.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
+        # # print cost[0,0] # DEBUG!
+        # for i in xrange(1, M):
+        #     cost[i, 0] = float('Inf') #cost[i - 1, 0] + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
+        #
+        # for j in xrange(1, N):
+        #     cost[0, j] = float('Inf') #cost[0, j - 1] + self.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
+        #
+        # cost[0, 0] = 0  # self.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
+        #
+        # # Populate rest of cost matrix within window
+        # for i in xrange(1, M):
+        #      for j in xrange(1, N): # max(1, i - self.max_warping_window), min(N, i + self.max_warping_window)
+        #         choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
+        #         cost[i, j] = min(choices) + self.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
+        #
+        # # Return DTW distance given window
+        # return cost[-1, -1]
+
+        # print cost[0,0] # DEBUG!
+        for i in xrange(0, M):
+            for j in xrange(0, N):
+                cost[i, j] = float('Inf') #cost[0, j - 1] + self.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
+
+        cost[0, 0] = 0  # self.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
 
         # Populate rest of cost matrix within window
         for i in xrange(1, M):
