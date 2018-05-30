@@ -1,5 +1,5 @@
 import time
-from KNNwithDTW import KnnDtw
+from DTW import Dtw
 from SupportMethods import GmPlot, GetTrajectorySets, readDatasets, TrainData
 
 
@@ -18,10 +18,10 @@ def findKearestNeighbors():
     minJourneyId = 0
     min_i = 0
 
-    knndtw = KnnDtw()
-    #knndtw.fit(trainSet, 1)
-    #knndtw.predict(testSetA1)
-    #knndtw._dtw_distance(trainSet['Trajectory'][1], testSetA1[1])
+    dtw = Dtw()
+    #dtw.fit(trainSet, 1)
+    #dtw.predict(testSetA1)
+    #dtw._dtw_distance(trainSet['Trajectory'][1], testSetA1[1])
 
     trainIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
@@ -51,7 +51,7 @@ def findKearestNeighbors():
             trajectoryTrain = trainTrajs[i]
             # print trajectoryTrain
 
-            cost = knndtw._dtw_distance(trajectoryTest, trajectoryTrain)
+            cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
             array.append((cost, i, trainIDs[i]))
             # print i.__str__() + ') Cost: ' + cost.__str__()
             if i == 0:

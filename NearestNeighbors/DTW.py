@@ -17,7 +17,7 @@ except ImportError:
     have_ipython = False
 
 
-class KnnDtw(object):
+class Dtw(object):
     """K-nearest neighbor classifier using dynamic time warping
     as the distance measure between pairs of time series arrays
 
