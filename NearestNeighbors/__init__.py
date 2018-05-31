@@ -3,7 +3,7 @@ from DTW import Dtw
 from SupportMethods import GmPlot, GetCoordinates, readDatasets, TrainData
 
 
-def findKearestNeighbors():
+def findKnearestNeighbors(K):
 
     # Combine code and find nearest neighbors!
 
@@ -26,7 +26,7 @@ def findKearestNeighbors():
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
     start_time = time.time()
-    curTime = start_time
+    lastTime = start_time   # For in-the-middle elapsed-time.
 
     testNum = 0
     for trajectoryTest in testSetA1['Trajectory']:
@@ -34,13 +34,13 @@ def findKearestNeighbors():
         testNum += 1
         # if testNum <= 2:
         #     continue
-        if testNum == 3:
-            break
+        # if testNum == 3:
+        #     break
 
-        array = []
-        sorted_array = []
+        nearestNeighbors = []
+        sorted_nearestNeighbors = []
 
-        print 'Checking for nearest-neighbor of test ' + testNum.__str__()
+        print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__()
 
         # print trajectoryTest # DEBUG!
 
@@ -52,7 +52,6 @@ def findKearestNeighbors():
             # print trajectoryTrain
 
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
-            array.append((cost, i, journeyPatternIDs[i]))
             # print i.__str__() + ') Cost: ' + cost.__str__()
             if i == 0:
                 min_cost = cost
@@ -62,7 +61,9 @@ def findKearestNeighbors():
                 min_train_trajectory = trajectoryTrain
                 min_i = i
                 minJourneyId = journeyPatternIDs[min_i]
-                print testNum.__str__() + '.' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()
+                nearestNeighbors.append((cost, i, journeyPatternIDs[i]))
+                print testNum.__str__() + '.' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()\
+                      + ' from  journeyPatternID: ' + minJourneyId.__str__()
 
             if i == 500:
                 break
@@ -70,28 +71,32 @@ def findKearestNeighbors():
             #print 'long: ' + trajectoryTest[1][1].__str__() + ' lat: ' + trajectoryTest[1][2].__str__()
             #print 'long: ' + trajectoryTrain[1][1].__str__() + ' lat: ' + trajectoryTrain[1][2].__str__()
 
-        curTime = (time.time() - curTime) / 60
+        curTime = time.time()
+        curElapsedTime = curTime - lastTime
+        lastTime = curTime
 
-        sorted_array = sorted(array, key=lambda tup: tup[0])
+        sorted_nearestNeighbors = sorted(nearestNeighbors, key=lambda tup: tup[0])
 
-        print '\nTest: ' + testNum.__str__() + ') finished in ' + curTime.__str__() + ' mins'\
+        print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
               + '\nMin_journeyId: ' + minJourneyId.__str__() + ' min_i: ' + min_i.__str__()\
               + ' Min_long: ' + min_train_trajectory[1][1].__str__() + ' Min_lat: ' + min_train_trajectory[1][2].__str__() + ' Min_cost: ' + min_cost.__str__()\
               + '\nSorted mins: '
+        for i in range(0, K):
+            print "TrajID: ", sorted_nearestNeighbors[i][2], " , cost: ", sorted_nearestNeighbors[i][0], " i: ", sorted_nearestNeighbors[i][1]
 
-        for i in range(0, 5):
-            print "TrajID: ", sorted_array[i][2], " , cost: ", sorted_array[i][0], " i: ", sorted_array[i][1]
+        # Plot test
+        longtitutes, latitudes = GetCoordinates.getCoordinates(trajectoryTest)
+        GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/dtw" + testNum.__str__() + "-test.html")
 
-        longtitutes, latitudes = GetCoordinates.getCoordinates(testSetA1['Trajectory'][1])
-        GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/sample" + testNum.__str__() + "-test.html")
+        # Plot trains
+        for i in range(0, K):
+            curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][1]]
+            longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
+            GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/dtw" + testNum.__str__() + "-train" + i.__str__() + ".html")
 
-        for i in range(0, 5):
-            curTrajectory = trainTrajs[sorted_array[i][1]]
-            longtitutes, latitudes = GetCoordinates.getCoordinates(curTrajectory)
-            GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/sample" + testNum.__str__() + "-train" + i.__str__() + ".html")
-
-    print "Elapsed time of KNNwithDTW for 'test_set_a1': ", (time.time() - start_time) / 60, 'mins'
+    print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins'
 
 
 if __name__ == '__main__':
-    findKearestNeighbors()
+    K = 5
+    findKnearestNeighbors(K)
