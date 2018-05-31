@@ -4,4 +4,6 @@ import NearestNeighbors
 
 if __name__ == '__main__':
     DataVisualisation.data_visualization()
-    NearestNeighbors.findKnearestNeighbors(5)
+
+    K = 5
+    NearestNeighbors.findKnearestNeighbors(K)
