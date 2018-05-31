@@ -1,6 +1,6 @@
 import time
 from DTW import Dtw
-from SupportMethods import GmPlot, GetTrajectorySets, readDatasets, TrainData
+from SupportMethods import GmPlot, GetCoordinates, readDatasets, TrainData
 
 
 def findKearestNeighbors():
@@ -23,7 +23,7 @@ def findKearestNeighbors():
     #dtw.predict(testSetA1)
     #dtw._dtw_distance(trainSet['Trajectory'][1], testSetA1[1])
 
-    trainIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
+    journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
     start_time = time.time()
     curTime = start_time
@@ -46,13 +46,13 @@ def findKearestNeighbors():
 
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
 
-            # print trainIDs[i] # DEBUG!
+            # print journeyPatternIDs[i] # DEBUG!
 
             trajectoryTrain = trainTrajs[i]
             # print trajectoryTrain
 
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
-            array.append((cost, i, trainIDs[i]))
+            array.append((cost, i, journeyPatternIDs[i]))
             # print i.__str__() + ') Cost: ' + cost.__str__()
             if i == 0:
                 min_cost = cost
@@ -61,7 +61,7 @@ def findKearestNeighbors():
                 min_cost = cost
                 min_train_trajectory = trajectoryTrain
                 min_i = i
-                minJourneyId = trainIDs[min_i]
+                minJourneyId = journeyPatternIDs[min_i]
                 print testNum.__str__() + '.' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()
 
             if i == 500:
@@ -82,23 +82,12 @@ def findKearestNeighbors():
         for i in range(0, 5):
             print "TrajID: ", sorted_array[i][2], " , cost: ", sorted_array[i][0], " i: ", sorted_array[i][1]
 
-        # Empty the arrays and plot the test-trajectory..
-        timeStamps = []
-        longtitutes = []
-        latitudes = []
-
-        timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(testSetA1['Trajectory'][1], timeStamps, longtitutes, latitudes)
+        longtitutes, latitudes = GetCoordinates.getCoordinates(testSetA1['Trajectory'][1])
         GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/sample" + testNum.__str__() + "-test.html")
 
         for i in range(0, 5):
             curTrajectory = trainTrajs[sorted_array[i][1]]
-
-            # Empty the arrays and plot the train-trajectory..
-            timeStamps = []
-            longtitutes = []
-            latitudes = []
-
-            timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(curTrajectory, timeStamps, longtitutes, latitudes)
+            longtitutes, latitudes = GetCoordinates.getCoordinates(curTrajectory)
             GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task2A1/sample" + testNum.__str__() + "-train" + i.__str__() + ".html")
 
     print "Elapsed time of KNNwithDTW for 'test_set_a1': ", (time.time() - start_time) / 60, 'mins'

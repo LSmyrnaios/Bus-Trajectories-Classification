@@ -2,19 +2,19 @@ from SupportMethods import readDatasets
 
 def getListsOfTrainData(trainSet):
 
-    trainIDs, trainTrajs = [], []
+    journeyPatternIDs, trainTrajs = [], []
 
     for row in trainSet['journeyPatternId']:
-        trainIDs.append(row)
+        journeyPatternIDs.append(row)
 
     for row in trainSet['Trajectory']:
         trainTrajs.append(row)
 
-    idListSize = trainIDs.__len__()
+    idListSize = journeyPatternIDs.__len__()
     if idListSize != trainTrajs.__len__():
         raise Exception("IDs and Trajectories had different sizes!")
 
-    return trainIDs, trainTrajs, idListSize
+    return journeyPatternIDs, trainTrajs, idListSize
 
 
 if __name__ == '__main__':

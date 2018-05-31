@@ -1,4 +1,5 @@
-from SupportMethods import GmPlot, GetTrajectorySets, readDatasets
+import random
+from SupportMethods import GmPlot, GetCoordinates, readDatasets, TrainData
 
 
 def data_visualization():
@@ -7,27 +8,24 @@ def data_visualization():
     trainSet = dataSets[0]
 
     #print trainSet.shape[0]  # DEBUG!
-    #print trainSet['Trajectory']
+    #print trainSet['Trajectory']  # DEBUG!
 
-    trip_num = 0
-    i = 0
+    journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
-    for row in trainSet['Trajectory']:
-        #print trip_num, row
+    selectedPatternIDs = []
+    numOfSelectedPatterns = 0
+    while True:
 
-        if trip_num == 5:
+        if numOfSelectedPatterns == 5:
             break
 
-        timeStamps = []
-        longtitutes = []
-        latitudes = []
-
-        if i % 11 == 1 or i % 17 == 1:
-            timeStamps, longtitutes, latitudes = GetTrajectorySets.getTrajectorySets(row, timeStamps, longtitutes, latitudes)
-            GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task1/TripMap" + i.__str__() + ".html")
-            trip_num += 1
-
-        i += 1
+        randomPattern = random.randint(1, trainListSize)
+        curPatternID = journeyPatternIDs[randomPattern]
+        if curPatternID not in selectedPatternIDs:
+            # plot the new pattern
+            longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomPattern])
+            GmPlot.gmPlot(latitudes, longtitutes, "../Resources/maps/task1/Pattern_" + curPatternID + ".html")
+            numOfSelectedPatterns += 1
 
 
 if __name__ == '__main__':
