@@ -1,5 +1,6 @@
 import random
-from SupportMethods import GmPlot, GetCoordinates, readDatasets, TrainData
+from SupportMethods import GetCoordinates, readDatasets, TrainData
+from DataVisualisation import GmPlot
 
 
 def data_visualization():

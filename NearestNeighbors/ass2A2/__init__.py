@@ -1,8 +1,8 @@
 import time
 
 from NearestNeighbors.ass2A2.LCSS import lcs
-from SupportMethods import readDatasets, TrainData, GmPlot, GetCoordinates
-from SupportMethods.GmPlot import gmPlotOfColours
+from SupportMethods import readDatasets, TrainData, GetCoordinates
+from DataVisualisation import GmPlot
 
 
 def runLCSS(K, useAllLCSs):
@@ -120,7 +120,7 @@ def runLCSS(K, useAllLCSs):
 
             curSubSeqTrajectory = sorted_subSequences[i][1]
             subLongtitutes, subLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
-            gmPlotOfColours(fullLatitudes, fullLongtitutes, subLatitudes, subLongtitutes,
+            GmPlot.gmPlotOfColours(fullLatitudes, fullLongtitutes, subLatitudes, subLongtitutes,
                             "../../Resources/maps/task2A2/lcss" + testNum.__str__() + "-train"
                             + sorted_subSequences[i][0].__str__() + "_PatternID_"
                             + journeyPatternIDs[sorted_subSequences[i][0]].__str__() + ".html")

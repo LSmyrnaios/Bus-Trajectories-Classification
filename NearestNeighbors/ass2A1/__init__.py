@@ -1,6 +1,7 @@
 import time
 from NearestNeighbors.ass2A1.DTW import Dtw
-from SupportMethods import GmPlot, GetCoordinates, readDatasets, TrainData
+from SupportMethods import GetCoordinates, readDatasets, TrainData
+from DataVisualisation import GmPlot
 
 
 def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
