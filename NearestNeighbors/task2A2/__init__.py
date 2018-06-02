@@ -1,3 +1,4 @@
+import os
 import time
 from NearestNeighbors.task2A2.LCSS import lcs
 from SupportMethods import readDatasets, TrainData, GetCoordinates
@@ -13,6 +14,10 @@ def runLCSS(K, useAllLCSs):
     testSetA2 = dataSets[1]
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
+
+    storeMapsDir = "../../Resources/maps/task2A2"
+    if not os.path.isdir(storeMapsDir):
+        os.makedirs(storeMapsDir)
 
     start_time = time.time()
     lastTime = start_time  # For in-the-middle elapsed-time.
@@ -88,7 +93,7 @@ def runLCSS(K, useAllLCSs):
                 # else:
                 #     iterations += 1
 
-                #print "Adding to the list!\n"
+                #print "Adding to the list!\n"  # DEBUG!
                 subSequences.append((i, LongestCS, len(LongestCS)))
 
 
@@ -101,7 +106,7 @@ def runLCSS(K, useAllLCSs):
 
         # Plot test
         fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(trajectoryTest)
-        GmPlot.gmPlot(fullLatitudes, fullLongtitutes, "../../Resources/maps/task2A2/lcss" + testNum.__str__() + "-test.html")
+        GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__() + "-test.html")
 
 
         # So now we pic the top 5 and we plot them....
@@ -120,7 +125,7 @@ def runLCSS(K, useAllLCSs):
             curSubSeqTrajectory = sorted_subSequences[i][1]
             subLongtitutes, subLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
             GmPlot.gmPlotOfColours(fullLatitudes, fullLongtitutes, subLatitudes, subLongtitutes,
-                            "../../Resources/maps/task2A2/lcss" + testNum.__str__() + "-train"
+                            storeMapsDir + "/lcss" + testNum.__str__() + "-train"
                             + sorted_subSequences[i][0].__str__() + "_PatternID_"
                             + journeyPatternIDs[sorted_subSequences[i][0]].__str__() + ".html")
 

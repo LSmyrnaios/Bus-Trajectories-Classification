@@ -1,3 +1,4 @@
+import os
 import time
 from NearestNeighbors.task2A1.DTW import Dtw
 from SupportMethods import GetCoordinates, readDatasets, TrainData
@@ -18,6 +19,10 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
     #dtw._dtw_distance(trainSet['Trajectory'][1], testSet[1])
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
+
+    storeMapsDir = "../../Resources/maps/task2A1"
+    if not os.path.isdir(storeMapsDir):
+        os.makedirs(storeMapsDir)
 
     start_time = time.time()
     lastTime = start_time   # For in-the-middle elapsed-time.
@@ -82,7 +87,7 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
 
         # Plot test
         longtitutes, latitudes = GetCoordinates.getCoordinates(trajectoryTest)
-        GmPlot.gmPlot(latitudes, longtitutes, "../../Resources/maps/task2A1/dtw" + testNum.__str__() + "-test.html")
+        GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__() + "-test.html")
 
         sorted_nearestNeighbors_fortest = []
 
@@ -93,7 +98,7 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
                 sorted_nearestNeighbors_fortest.append(sorted_nearestNeighbors[i][1])
             curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][0]]
             longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
-            GmPlot.gmPlot(latitudes, longtitutes, "../../Resources/maps/task2A1/dtw" + testNum.__str__()
+            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
                           + "-train" + (i+1).__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
 
         # Make a list with all the neighbours for all the tests
