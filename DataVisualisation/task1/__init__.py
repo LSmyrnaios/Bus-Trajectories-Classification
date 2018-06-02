@@ -25,14 +25,14 @@ def data_visualization():
         if numOfSelectedPatterns == 5:
             break
 
-        randomPattern = random.randint(0, trainListSize-1)
-        curPatternID = journeyPatternIDs[randomPattern]
+        randomTrain = random.randint(0, trainListSize-1)
+        curPatternID = journeyPatternIDs[randomTrain]
         if curPatternID not in selectedPatternIDs:
             selectedPatternIDs.append(curPatternID)
             # plot the new pattern
             print 'Going to plot a new random train..'
-            longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomPattern])
-            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/Pattern_" + curPatternID + ".html")
+            longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomTrain])
+            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html")
             numOfSelectedPatterns += 1
 
 

@@ -96,7 +96,7 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
             curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][0]]
             longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
             GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
-                          + "-train" + (i+1).__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
+                          + "-train" + sorted_nearestNeighbors[i][0].__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
 
         # Make a list with all the neighbours for all the tests
         sorted_nearestNeighbors_foralltests.append(sorted_nearestNeighbors_fortest)
