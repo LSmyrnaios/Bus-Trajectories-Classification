@@ -1,6 +1,5 @@
 import operator
-
-from NearestNeighbors.ass2A1 import findKnearestNeighbors
+from NearestNeighbors.task2A1 import findKnearestNeighbors
 from SupportMethods import readDatasets
 from SupportMethods.writePredictionsToCsv import write_predictions_to_csv
 

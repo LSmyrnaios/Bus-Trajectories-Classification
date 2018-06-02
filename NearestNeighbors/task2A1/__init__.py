@@ -1,5 +1,5 @@
 import time
-from NearestNeighbors.ass2A1.DTW import Dtw
+from NearestNeighbors.task2A1.DTW import Dtw
 from SupportMethods import GetCoordinates, readDatasets, TrainData
 from DataVisualisation import GmPlot
 

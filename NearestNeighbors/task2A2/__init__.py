@@ -1,6 +1,5 @@
 import time
-
-from NearestNeighbors.ass2A2.LCSS import lcs
+from NearestNeighbors.task2A2.LCSS import lcs
 from SupportMethods import readDatasets, TrainData, GetCoordinates
 from DataVisualisation import GmPlot
 
