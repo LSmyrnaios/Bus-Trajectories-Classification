@@ -7,11 +7,12 @@ def read_dataset(shouldReadTrain, shouldReadTestA1, shouldReadTestA2):
     returnValues = []
 
     if shouldReadTrain:
-        trainSet = pd.read_csv('../../Resources/DataSets/train_set.csv',
+        locationTrain = '../../Resources/DataSets/train_set.csv'
+        trainSet = pd.read_csv(locationTrain,
             converters={"Trajectory": literal_eval},
             index_col='tripId'
         )
-        print "Finished loading train."
+        print "Finished loading train: " + "\'" + locationTrain + "\'"
         print 'TrainSet size: ' + trainSet.__len__().__str__()
         returnValues.append(trainSet)
 
