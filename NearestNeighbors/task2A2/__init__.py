@@ -103,11 +103,9 @@ def runLCSS(K, useAllLCSs):
 
         print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))
 
-
         # Plot test
         fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(trajectoryTest)
         GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__() + "-test.html")
-
 
         # So now we pic the top 5 and we plot them....
         sorted_subSequences = sorted(subSequences, reverse=True, key=lambda tup: tup[2])

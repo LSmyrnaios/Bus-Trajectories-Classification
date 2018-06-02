@@ -14,17 +14,17 @@ def runClassification(K):
     testSet = dataSets[1]
 
 
-    makeListOfAllNeighbors = True
+    makeListsOfNeighborsForAllTests = True
 
-    neighborsTestList = findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet)
+    neighborsTestsLists = findKnearestNeighbors(K, makeListsOfNeighborsForAllTests, trainSet, testSet)
 
-    neighborsTestList[0].append("1500")
+    neighborsTestsLists[0].append("1500")
 
     # patterns = ['15466', '15466', '15466', '58984', '58984', '96548', '58984', '58984']
 
     testNum = 0
     testData = []
-    for test in neighborsTestList:
+    for test in neighborsTestsLists:
 
         testNum += 1
 

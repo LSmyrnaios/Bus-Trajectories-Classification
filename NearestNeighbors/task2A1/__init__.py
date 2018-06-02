@@ -33,10 +33,10 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
     for trajectoryTest in testSet['Trajectory']:
 
         testNum += 1
-        if testNum < 2:
-            continue
-        if testNum == 3:
-            break
+        # if testNum < 2:
+        #     continue
+        # if testNum == 3:
+        #     break
 
         nearestNeighbors = []
         sorted_nearestNeighbors = []
@@ -47,14 +47,14 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
 
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
 
-            # print journeyPatternIDs[i] # DEBUG!
-
             trajectoryTrain = trainTrajs[i]
-            # print trajectoryTrain
+            curPatternID = journeyPatternIDs[i]
 
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
-            nearestNeighbors.append((i, journeyPatternIDs[min_i], cost))
             # print i.__str__() + ') Cost: ' + cost.__str__()
+
+            nearestNeighbors.append((i, curPatternID, cost))
+
             if i == 0:
                 min_cost = cost
                 min_train_trajectory = trajectoryTrain
@@ -62,15 +62,12 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
                 min_cost = cost
                 min_train_trajectory = trajectoryTrain
                 min_i = i
-                minJourneyId = journeyPatternIDs[min_i]
+                minJourneyId = curPatternID
                 print testNum.__str__() + '-' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()\
                       + ' from  journeyPatternID: ' + minJourneyId.__str__()
 
-            if i == 360:
-                break
-
-            #print 'long: ' + trajectoryTest[1][1].__str__() + ' lat: ' + trajectoryTest[1][2].__str__()
-            #print 'long: ' + trajectoryTrain[1][1].__str__() + ' lat: ' + trajectoryTrain[1][2].__str__()
+            # if i == 360:
+            #     break
 
         curTime = time.time()
         curElapsedTime = curTime - lastTime
