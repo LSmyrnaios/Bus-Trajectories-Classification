@@ -27,7 +27,7 @@ def getScreenshotsFromMaps():
                 driver.save_screenshot(imagesDir + "/" + fileName + '.png')
 
     # task 2A1
-    task2A1Path = "../Resources/maps/taskA21"
+    task2A1Path = "../Resources/maps/task2A1"
     if os.path.isdir(task2A1Path):
         imagesDir = task2A1Path + "/images"
         if not os.path.isdir(imagesDir):
