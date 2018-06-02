@@ -6,9 +6,9 @@ from selenium import webdriver
 
 def getScreenshotsFromMaps():
 
-    driver = webdriver.Firefox(executable_path=r"C:\geckodriver.exe")
-
     cwd = os.getcwd()   # Current Working Directory. It's needed for many reasons
+    driverFullPath = cwd + "/../Resources/maps/geckodriver.exe"
+    driver = webdriver.Firefox(executable_path=driverFullPath)
 
     # task 1
     task1Path = "../Resources/maps/task1"
