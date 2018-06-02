@@ -22,7 +22,7 @@ def getScreenshotsFromMaps():
                 fileFullPath = "file:///" + cwd + "/" + task1Path + "/" + fileName
                 #print fileFullPath
                 driver.get(fileFullPath)
-                time.sleep(1)   # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
+                time.sleep(2)   # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
                 fileName = fileName.replace(".html", "")
                 driver.save_screenshot(imagesDir + "/" + fileName + '.png')
 
@@ -37,7 +37,7 @@ def getScreenshotsFromMaps():
                 print 'Getting screenshot from: ..task2A1/' + fileName
                 fileFullPath = "file:///" + cwd + "/" + task2A1Path + "/" + fileName
                 driver.get(fileFullPath)
-                time.sleep(1)  # Wait for the driver to render the html.
+                time.sleep(2)  # Wait for the driver to render the html.
                 fileName = fileName.replace(".html", "")
                 driver.save_screenshot(imagesDir + "/" + fileName + '.png')
 
@@ -52,7 +52,7 @@ def getScreenshotsFromMaps():
                 print 'Getting screenshot from: ..task2A2/' + fileName
                 fileFullPath = "file:///" + cwd + "/" + task2A2Path + "/" + fileName
                 driver.get(fileFullPath)
-                time.sleep(1)  # Wait for the driver to render the html.
+                time.sleep(2)  # Wait for the driver to render the html.
                 fileName = fileName.replace(".html", "")
                 driver.save_screenshot(imagesDir + "/" + fileName + '.png')
 
