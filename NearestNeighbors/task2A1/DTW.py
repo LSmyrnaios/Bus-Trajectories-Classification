@@ -32,9 +32,11 @@ class Dtw(object):
         item is skipped. Implemented by x[:, ::subsample_step]
     """
 
-    def __init__(self, n_neighbors=5, max_warping_window=10000, subsample_step=1):
+    def __init__(self, n_neighbors=5, max_warping_window_percentage=0.7, subsample_step=1):
         self.n_neighbors = n_neighbors
-        self.max_warping_window = max_warping_window
+        if max_warping_window_percentage > 1.0:   # If the percentage given is not a decimal below zero... make it like it.
+            max_warping_window_percentage = max_warping_window_percentage/100
+        self.max_warping_window_percentage = max_warping_window_percentage
         self.subsample_step = subsample_step
 
     def fit(self, x, l):
@@ -76,6 +78,9 @@ class Dtw(object):
         # Create cost matrix via broadcasting with large int
         ts_a, ts_b = np.array(ts_a), np.array(ts_b)
         M, N = len(ts_a), len(ts_b)
+
+        max_warping_window = int(N*self.max_warping_window_percentage)
+
 
         #print '1) Array1 len: ' + M.__str__() + ' Array2 len: ' + N.__str__()
         #print '2) Array1 len: ' + ts_a.shape.__str__() + ' Array2 len: ' + ts_b.shape.__str__()
@@ -129,7 +134,7 @@ class Dtw(object):
 
         # Populate rest of cost matrix within window
         for i in xrange(1, M):
-             for j in xrange(1, N): # max(1, i - self.max_warping_window), min(N, i + self.max_warping_window)
+             for j in xrange(max(1, i - max_warping_window), min(N, i + max_warping_window)):
                 choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
                 cost[i, j] = min(choices) + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
 
@@ -162,13 +167,14 @@ class Dtw(object):
             x_s = shape(x)
             dm = np.zeros((x_s[0] * (x_s[0] - 1)) // 2, dtype=np.double)
 
-            p = ProgressBar(shape(dm)[0])
+            # p = ProgressBar(shape(dm)[0])
 
             for i in xrange(0, x_s[0] - 1):
                 for j in xrange(i + 1, x_s[0]):
                     dm[dm_count] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
-                    dm_count += 1
-                    p.animate(dm_count)
+                    dm_count += 1   # This is needed above..
+                    # Update progress bar
+                    # p.animate(dm_count)
 
             # Convert to squareform
             dm = squareform(dm)
@@ -181,14 +187,14 @@ class Dtw(object):
             dm = np.zeros((x_s[0], y_s[0]))
             dm_size = x_s[0] * y_s[0]
 
-            p = ProgressBar(dm_size)
+            #p = ProgressBar(dm_size)
 
             for i in xrange(0, x_s[0]):
                 for j in xrange(0, y_s[0]):
                     dm[i, j] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
                     # Update progress bar
-                    dm_count += 1
-                    p.animate(dm_count)
+                    # dm_count += 1
+                    #p.animate(dm_count)
 
             return dm
 

@@ -1,10 +1,11 @@
 import os
 import random
+import time
 from DataVisualisation import GmPlot
 from SupportMethods import GetCoordinates, readDatasets, TrainData
 
 
-def data_visualization():
+def data_visualization(K):
 
     dataSets = readDatasets.read_dataset(True, False, False)
     trainSet = dataSets[0]
@@ -20,9 +21,17 @@ def data_visualization():
 
     selectedPatternIDs = []
     numOfSelectedPatterns = 0
+
+    start_time = time.time()
+    maxSecondsToWait = 120
+
     while True:
 
-        if numOfSelectedPatterns == 5:
+        if numOfSelectedPatterns == K:
+            print 'Finished ploting ' + K.__str__() + ' distinct random patterns.'
+            break
+        elif (time.time() - start_time) > maxSecondsToWait:
+            print 'The program could not find ' + K.__str__() + ' distinct random patterns in the specified time: ' + maxSecondsToWait.__str__()
             break
 
         randomTrain = random.randint(0, trainListSize-1)
@@ -37,4 +46,5 @@ def data_visualization():
 
 
 if __name__ == '__main__':
-    data_visualization()
+    K = 5
+    data_visualization(K)

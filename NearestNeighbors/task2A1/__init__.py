@@ -13,11 +13,6 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
     minJourneyId = 0
     min_i = 0
 
-    dtw = Dtw()
-    #dtw.fit(trainSet, 1)
-    #dtw.predict(testSet)
-    #dtw._dtw_distance(trainSet['Trajectory'][1], testSet[1])
-
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
     storeMapsDir = "../../Resources/maps/task2A1"
@@ -26,6 +21,8 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
 
     start_time = time.time()
     lastTime = start_time   # For in-the-middle elapsed-time.
+
+    dtw = Dtw(max_warping_window_percentage=0.33)
 
     sorted_nearestNeighbors_foralltests = []
 
