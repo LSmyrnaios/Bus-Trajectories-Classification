@@ -1,3 +1,4 @@
+import math
 import os
 import time
 from NearestNeighbors.task2A1.DTW import Dtw
@@ -7,12 +8,6 @@ from DataVisualisation import GmPlot
 
 
 def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, testSet):
-
-    i=0
-    min_cost = 0
-    min_train_trajectory = []
-    minJourneyId = 0
-    min_i = 0
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
@@ -28,6 +23,8 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
 
     sorted_nearestNeighbors_foralltests = []
 
+    inf_costs_count = 0
+
     testNum = 0
     for trajectoryTest in testSet['Trajectory']:
 
@@ -35,35 +32,47 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         # if testNum < 2:
         #     continue
         # if testNum == 3:
+        #     print 'InfCount: ' + inf_costs_count.__str__()
         #     break
 
         print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__()
 
         # print trajectoryTest # DEBUG!
+        min_cost = 1000
+        minJourneyPatternId = ''
+        min_i = 0
 
+        print testNum.__str__() + ')' + ' curInfCount: ' + inf_costs_count.__str__()
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
 
+            # if i == 1500:
+            #     break
+
             trajectoryTrain = trainTrajs[i]
+
             curPatternID = journeyPatternIDs[i]
 
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
-            # print i.__str__() + ') Cost: ' + cost.__str__()
+
+            if math.isinf(cost):
+                # diff = abs(len(trajectoryTrain) - len(trajectoryTest))
+                # print 'returned inf while having a diff of: ' + diff.__str__()
+                #print 'We have an inf cost in DTW: test:' + testNum.__str__() + ' - trainPatternID: ' + curPatternID
+                inf_costs_count += 1
+                continue
+
+            if cost <= 5.0:
+                print testNum.__str__() + '-' + i.__str__() + ') Cost (lessOrEqual to 5.0): ' + cost.__str__()\
+                      + ' from  journeyPatternID: ' + minJourneyPatternId.__str__()
 
             kMins.checkMaxCostAndInsert([i, curPatternID, cost])
 
-            if i == 0:
+            if cost < min_cost:
                 min_cost = cost
-                min_train_trajectory = trajectoryTrain
-            elif cost < min_cost:
-                min_cost = cost
-                min_train_trajectory = trajectoryTrain
                 min_i = i
-                minJourneyId = curPatternID
+                minJourneyPatternId = curPatternID
                 print testNum.__str__() + '-' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()\
-                      + ' from  journeyPatternID: ' + minJourneyId.__str__()
-
-            # if i == 360:
-            #     break
+                      + ' from  journeyPatternID: ' + minJourneyPatternId.__str__()
 
         curTime = time.time()
         curElapsedTime = curTime - lastTime
@@ -72,8 +81,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         sorted_nearestNeighbors = sorted(kMins.getArray(), key=lambda tup: tup[2])
 
         print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
-              + '\nMin_journeyId: ' + minJourneyId.__str__() + ' min_i: ' + min_i.__str__()\
-              + ' Min_long: ' + min_train_trajectory[1][1].__str__() + ' Min_lat: ' + min_train_trajectory[1][2].__str__() + ' Min_cost: ' + min_cost.__str__()\
+              + '\nMin_journeyPatternId: ' + minJourneyPatternId.__str__() + ' Min_i: ' + min_i.__str__() + ' Min_cost: ' + min_cost.__str__()\
               + '\nSorted mins: '
         for i in range(0, K):
             print  "i: ", sorted_nearestNeighbors[i][0], " PatternID: ", sorted_nearestNeighbors[i][1], " , cost: ", sorted_nearestNeighbors[i][2]

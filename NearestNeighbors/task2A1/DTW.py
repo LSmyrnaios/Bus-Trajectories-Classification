@@ -85,7 +85,8 @@ class Dtw(object):
         #print '1) Array1 len: ' + M.__str__() + ' Array2 len: ' + N.__str__()
         #print '2) Array1 len: ' + ts_a.shape.__str__() + ' Array2 len: ' + ts_b.shape.__str__()
         cost = sys.maxint * np.ones((M, N))
-        # # Time
+
+        # Given code.
         # # Initialize the first row and column
         # cost[0, 0] = d(ts_a[0][0], ts_b[0][0])
         # for i in xrange(1, M):
@@ -104,10 +105,8 @@ class Dtw(object):
         # # Return DTW distance given window
         # return cost[-1, -1]
 
-        # Distance
+        # Given code with our Haversine where needed.
         # Initialize the first row and column
-
-        # # print cost[0,0] # DEBUG!
         # for i in xrange(1, M):
         #     cost[i, 0] = float('Inf') #cost[i - 1, 0] + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
         #
@@ -125,7 +124,7 @@ class Dtw(object):
         # # Return DTW distance given window
         # return cost[-1, -1]
 
-        # print cost[0,0] # DEBUG!
+        # Wikipedia-s code with our Haversine where needed.
         for i in xrange(0, M):
             for j in xrange(0, N):
                 cost[i, j] = float('Inf') #cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
@@ -134,7 +133,7 @@ class Dtw(object):
 
         # Populate rest of cost matrix within window
         for i in xrange(1, M):
-             for j in xrange(max(1, i - max_warping_window), min(N, i + max_warping_window)):
+            for j in xrange(max(1, i - max_warping_window), min(N, i + max_warping_window)):
                 choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
                 cost[i, j] = min(choices) + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
 

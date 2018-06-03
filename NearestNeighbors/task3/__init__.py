@@ -15,7 +15,7 @@ def runClassification(K):
 
 
     makeListsOfNeighborsForAllTests = True
-    plotPatterns = False
+    plotPatterns = False    # We just want the KNN, not the html-maps.
 
     neighborsTestsLists = findKnearestNeighbors(K, plotPatterns, makeListsOfNeighborsForAllTests, trainSet, testSet)
 
