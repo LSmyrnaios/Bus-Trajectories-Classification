@@ -134,5 +134,5 @@ def runLCSS(K, useAllLCSs):
 
 if __name__ == '__main__':
     K = 5
-    useAllLCSs = False
+    useAllLCSs = False  # Should we retrieve all of the LCSS for each test or only the longest one? The last one is faster.
     runLCSS(K, useAllLCSs)

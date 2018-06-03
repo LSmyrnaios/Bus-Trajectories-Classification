@@ -1,6 +1,7 @@
 import os
 import time
 from NearestNeighbors.task2A1.DTW import Dtw
+from NearestNeighbors.task2A1.K_Mins import KMins
 from SupportMethods import GetCoordinates, readDatasets, TrainData
 from DataVisualisation import GmPlot
 
@@ -23,6 +24,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
     lastTime = start_time   # For in-the-middle elapsed-time.
 
     dtw = Dtw(max_warping_window_percentage=0.33)
+    kMins = KMins(K)
 
     sorted_nearestNeighbors_foralltests = []
 
@@ -34,9 +36,6 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         #     continue
         # if testNum == 3:
         #     break
-
-        nearestNeighbors = []
-        sorted_nearestNeighbors = []
 
         print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__()
 
@@ -50,7 +49,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
             # print i.__str__() + ') Cost: ' + cost.__str__()
 
-            nearestNeighbors.append((i, curPatternID, cost))
+            kMins.checkMaxCostAndInsert([i, curPatternID, cost])
 
             if i == 0:
                 min_cost = cost
@@ -70,7 +69,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         curElapsedTime = curTime - lastTime
         lastTime = curTime
 
-        sorted_nearestNeighbors = sorted(nearestNeighbors, key=lambda tup: tup[2])
+        sorted_nearestNeighbors = sorted(kMins.getArray(), key=lambda tup: tup[2])
 
         print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
               + '\nMin_journeyId: ' + minJourneyId.__str__() + ' min_i: ' + min_i.__str__()\
@@ -98,8 +97,9 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
                     GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
                                   + "-train" + sorted_nearestNeighbors[i][0].__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
 
-        # Make a list with all the neighbours for all the tests
-        sorted_nearestNeighbors_foralltests.append(sorted_nearestNeighbors_fortest)
+        if makeListOfAllNeighbors:
+            # Make a list with all the neighbours for all the tests
+            sorted_nearestNeighbors_foralltests.append(sorted_nearestNeighbors_fortest)
 
 
     print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins'
