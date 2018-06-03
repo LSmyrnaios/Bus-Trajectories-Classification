@@ -15,8 +15,9 @@ def runClassification(K):
 
 
     makeListsOfNeighborsForAllTests = True
+    plotPatterns = False
 
-    neighborsTestsLists = findKnearestNeighbors(K, makeListsOfNeighborsForAllTests, trainSet, testSet)
+    neighborsTestsLists = findKnearestNeighbors(K, plotPatterns, makeListsOfNeighborsForAllTests, trainSet, testSet)
 
     neighborsTestsLists[0].append("1500")
 

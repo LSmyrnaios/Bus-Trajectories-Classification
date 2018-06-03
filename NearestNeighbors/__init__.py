@@ -11,7 +11,9 @@ def runA1andA2():
 
     K = 5
     makeListOfAllNeighbors = False
-    task2A1.findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet)
+    plotPatterns = True
+
+    task2A1.findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, testSet)
 
     # This doesn't take any dataSets as parameters.. i gets the in its own
     task2A2.runLCSS(K, False)

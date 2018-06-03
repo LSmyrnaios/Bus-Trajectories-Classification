@@ -5,7 +5,7 @@ from SupportMethods import GetCoordinates, readDatasets, TrainData
 from DataVisualisation import GmPlot
 
 
-def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
+def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, testSet):
 
     i=0
     min_cost = 0
@@ -79,21 +79,24 @@ def findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSet):
         for i in range(0, K):
             print  "i: ", sorted_nearestNeighbors[i][0], " PatternID: ", sorted_nearestNeighbors[i][1], " , cost: ", sorted_nearestNeighbors[i][2]
 
-        # Plot test
-        longtitutes, latitudes = GetCoordinates.getCoordinates(trajectoryTest)
-        GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__() + "-test.html")
+        if plotPatterns:
+            # Plot test
+            longtitutes, latitudes = GetCoordinates.getCoordinates(trajectoryTest)
+            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__() + "-test.html")
 
-        sorted_nearestNeighbors_fortest = []
+        if plotPatterns or makeListOfAllNeighbors:
+            sorted_nearestNeighbors_fortest = []
 
-        # Plot trains
-        for i in range(0, K):
-            # Make a list with all the neighbours
-            if makeListOfAllNeighbors:
-                sorted_nearestNeighbors_fortest.append(sorted_nearestNeighbors[i][1])
-            curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][0]]
-            longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
-            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
-                          + "-train" + sorted_nearestNeighbors[i][0].__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
+            # Plot trains
+            for i in range(0, K):
+                # Make a list with all the neighbours
+                if makeListOfAllNeighbors:
+                    sorted_nearestNeighbors_fortest.append(sorted_nearestNeighbors[i][1])
+                if plotPatterns:
+                    curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][0]]
+                    longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
+                    GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
+                                  + "-train" + sorted_nearestNeighbors[i][0].__str__() + "_PatternID_" + journeyPatternIDs[i].__str__() + ".html")
 
         # Make a list with all the neighbours for all the tests
         sorted_nearestNeighbors_foralltests.append(sorted_nearestNeighbors_fortest)
@@ -112,5 +115,6 @@ if __name__ == '__main__':
     testSetA1 = dataSets[1]
 
     K = 5
+    plotPatterns = True
     makeListOfAllNeighbors = False
-    findKnearestNeighbors(K, makeListOfAllNeighbors, trainSet, testSetA1)
+    findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, testSetA1)
