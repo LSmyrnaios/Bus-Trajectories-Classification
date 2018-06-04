@@ -1,6 +1,7 @@
 import operator
 from NearestNeighbors.task2A1 import findKnearestNeighbors
 from SupportMethods import readDatasets
+from SupportMethods.GetVotes import getVotes
 from SupportMethods.writePredictionsToCsv import write_predictions_to_csv
 
 
@@ -17,38 +18,55 @@ def runClassification(K):
 
     maxWarpingWindowPercentage = 0.33  # For testSet_a2, we need a bigger window to get the right patternIDs.
 
-    neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests, trainSet,
-                                                testSet)
 
-    # patterns = ['15466', '15466', '15466', '58984', '58984', '96548', '58984', '58984']
+    # Run KNN for test_a2
 
-    testNum = 0
-    testData = []
-    for test in neighborsTestsLists:
+    neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests,
+                                                trainSet, testSet)
 
-        testNum += 1
-
-        classVotes = {}
-        for x in range(len(test)):
-            response = test[x]
-            if response in classVotes:
-                classVotes[response] += 1
-            else:
-                classVotes[response] = 1
-
-        sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
-        print sortedVotes
-
-        testData.append((testNum, sortedVotes[0][0]))
-
+    testData = getVotes(neighborsTestsLists)
 
     write_predictions_to_csv(testData)
 
 
-    # 1/10 train
-    # gia ka8e train
-    # Split train_dataset into 0.7% train and 0.3% test.
-    # train_x, test_x, train_y, test_y = train_test_split(train_data[headers[2:4]], train_data[headers[-1]], train_size=0.7, test_size=0.3)
+    # Run cross-validation.
+
+    # accuracies = []
+    # num_folds = 10
+    # subset_size = len(trainSet)/num_folds
+    #
+    # for i in range(num_folds):
+    #
+    #     testing_this_round = trainSet[i*subset_size:][:subset_size]
+    #     training1 = trainSet[0:][:subset_size * i]
+    #     training2 = trainSet[(i+1)*subset_size:][:subset_size*(10-i-1)]
+    #
+    #     training_this_round = training1 + training2#np.concatenate((training1, training2), axis=0)
+    #
+    #     #print training2['journeyPatternId']
+    #
+    #     neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests,
+    #                                                 training2, testing_this_round)
+    #
+    #     testData = getVotes(neighborsTestsLists)
+    #
+    #     print(testData)
+    #
+    #     correct = 0
+    #     i=0
+    #     for row in trainSet['journeyPatternId']:
+    #         if(i==100):break
+    #         try:
+    #             print "Predicted: ", testData[i][1], ' - ', "Actual: ", row
+    #             if(testData[i][1] is row):
+    #                 correct += 1
+    #         except: #IndexError:
+    #             break
+    #         i+=1
+    #
+    #
+    #     print 'Correct predictions: ', correct
+    #     print 'Accuacy: ', float(correct)/100
 
 
 if __name__ == '__main__':
