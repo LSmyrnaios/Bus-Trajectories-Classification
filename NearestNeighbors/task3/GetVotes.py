@@ -3,8 +3,8 @@ import operator
 
 def getVotes(neighborsTestsLists):
 
-    testNum = 0
     testData = []
+    testNum = 0
     for test in neighborsTestsLists:
         testNum += 1
         classVotes = {}
@@ -16,9 +16,7 @@ def getVotes(neighborsTestsLists):
                 classVotes[response] = 1
 
         sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
-
         print '\nTest:', testNum, 'votes:\n', sortedVotes
-
         testData.append((testNum, sortedVotes[0][0]))
 
     return testData

@@ -1,7 +1,7 @@
 from NearestNeighbors.task2A1 import findKnearestNeighbors
 from NearestNeighbors.task3.crossValidation import crossValidation
 from SupportMethods import readDatasets
-from SupportMethods.GetVotes import getVotes
+from NearestNeighbors.task3.GetVotes import getVotes
 from SupportMethods.writePredictionsToCsv import write_predictions_to_csv
 
 

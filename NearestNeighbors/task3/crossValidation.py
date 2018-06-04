@@ -1,6 +1,6 @@
 from NearestNeighbors.task2A1 import findKnearestNeighbors
 from SupportMethods import readDatasets
-from SupportMethods.GetVotes import getVotes
+from NearestNeighbors.task3.GetVotes import getVotes
 
 
 def crossValidation(K, maxWarpingWindowPercentage, trainSet, num_folds=10):
