@@ -41,7 +41,8 @@ def data_visualization(K):
             # plot the new pattern
             print 'Going to plot a new random train..'
             longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomTrain])
-            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html")
+            GmPlot.gmPlot(latitudes, longtitutes,
+                          storeMapsDir + "/train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html")
             numOfSelectedPatterns += 1
 
 

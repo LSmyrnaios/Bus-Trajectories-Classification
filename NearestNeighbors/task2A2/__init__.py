@@ -1,5 +1,7 @@
 import os
 import time
+
+from NearestNeighbors.K_arrayList.K_Maxs import KMaxs
 from NearestNeighbors.task2A2.LCSS import lcs
 from SupportMethods import readDatasets, TrainData, GetCoordinates
 from DataVisualisation import GmPlot
@@ -18,6 +20,8 @@ def runLCSS(K, useAllLCSs):
     storeMapsDir = "../../Resources/maps/task2A2"
     if not os.path.isdir(storeMapsDir):
         os.makedirs(storeMapsDir)
+
+    kMaxs = KMaxs(K)
 
     start_time = time.time()
     lastTime = start_time  # For in-the-middle elapsed-time.
@@ -73,8 +77,8 @@ def runLCSS(K, useAllLCSs):
                 if not max_list:
                     continue
                 else:
-                    print "Adding to the list!\n"
-                    subSequences.append((i, max_list, max_common_points))
+                    #subSequences.append((i, max_list, max_common_points))
+                    kMaxs.checkMinLengthAndInsert([i, max_list, max_common_points])
 
             else:
                 LongestCS = lcs(trajectoryTrain, trajectoryTest, useAllLCSs)
@@ -82,15 +86,15 @@ def runLCSS(K, useAllLCSs):
                 if not LongestCS:
                     continue
                 # else:
-                #     print LongestCS
+                #     print i.__str__() + ') LCS length: ' + len(LongestCS).__str__()
 
                 # if iterations == 10:
                 #     break
                 # else:
                 #     iterations += 1
 
-                #print "Adding to the list!\n"  # DEBUG!
-                subSequences.append((i, LongestCS, len(LongestCS)))
+                #subSequences.append((i, LongestCS, len(LongestCS)))
+                kMaxs.checkMinLengthAndInsert([i, LongestCS, len(LongestCS)])
 
 
         curTime = time.time()
@@ -104,14 +108,15 @@ def runLCSS(K, useAllLCSs):
         GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__() + "-test.html")
 
         # So now we pic the top 5 and we plot them....
-        sorted_subSequences = sorted(subSequences, reverse=True, key=lambda tup: tup[2])
-        sortedLength = len(sorted_subSequences)
+        sorted_subSequences = sorted(kMaxs.getArrayList(), reverse=True, key=lambda tup: tup[2])
+        kMaxs.resetArrayList()  # Reset arrayList before going to the next testSet.
 
-        print "Sorted array length is ", sortedLength
-
-        for i in range(0, sortedLength):
+        for i in range(0, len(sorted_subSequences)):
             if i == 5: break
-            print sorted_subSequences[i]
+
+            print "Train " + sorted_subSequences[i][0].__str__() + ") PatternID: "\
+                + journeyPatternIDs[sorted_subSequences[i][0]].__str__()\
+                + ", MatchingPoints: " + sorted_subSequences[i][2].__str__() + ".html"
 
             curSubSeqTrajectory = trainTrajs[sorted_subSequences[i][0]]
             fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
@@ -119,9 +124,11 @@ def runLCSS(K, useAllLCSs):
             curSubSeqTrajectory = sorted_subSequences[i][1]
             subLongtitutes, subLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
             GmPlot.gmPlotOfColours(fullLatitudes, fullLongtitutes, subLatitudes, subLongtitutes,
-                            storeMapsDir + "/lcss" + testNum.__str__() + "-train"
-                            + sorted_subSequences[i][0].__str__() + "_PatternID_"
-                            + journeyPatternIDs[sorted_subSequences[i][0]].__str__() + ".html")
+                                   storeMapsDir + "/lcss" + testNum.__str__() + "-train"
+                                   + sorted_subSequences[i][0].__str__() + "_PatternID_"
+                                   + journeyPatternIDs[sorted_subSequences[i][0]].__str__()
+                                   + "-MatchingPoints_" + sorted_subSequences[i][2].__str__()
+                                   + "-Time(sec)_" + curElapsedTime.__str__() + ".html")
 
 
     print "\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(

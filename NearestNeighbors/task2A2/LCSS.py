@@ -66,19 +66,20 @@ def all_lcs(lcs_dict, matrix, list1, list2, index1, index2):
         return lcs_list
 
 
-# return a set of the sets of longest common subsequences in list1 and list2
+# return a set of the sets of longest common subsequences in list1 and list2 or just a set containing the most-LCS
 def lcs(list1, list2, useAllLCSs):
-    # mapping of indices to list of LCSs, so we can cut down recursive calls enormously
-    mapping = dict()
+
     # start the process...
     matrix = lcs_matrix(list1, list2)
 
     # len1 = len(list1)
     # len2 = len(list2)
-    # if(matrix[len1-1][len2-1]>0):
+    # if matrix[len1-1][len2-1] > 0:
     #     print "Common points: ", matrix[len1-1][len2-1]
 
     if useAllLCSs:
+        # mapping of indices to list of LCSs, so we can cut down recursive calls enormously
+        mapping = dict()
         return all_lcs(mapping, lcs_matrix(list1, list2), list1, list2, len(list1), len(list2))
     else:
         return longestCSS(matrix, list1, list2, len(list1), len(list2))

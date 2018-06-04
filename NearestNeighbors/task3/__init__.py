@@ -6,20 +6,19 @@ from SupportMethods.writePredictionsToCsv import write_predictions_to_csv
 
 def runClassification(K):
 
-    print 'I am happy to help you classify!'
-
+    print 'Start KNN Classification..'
 
     dataSets = readDatasets.read_dataset(True, False, True)
     trainSet = dataSets[0]
     testSet = dataSets[1]
 
-
     makeListsOfNeighborsForAllTests = True
     plotPatterns = False    # We just want the KNN, not the html-maps.
 
-    neighborsTestsLists = findKnearestNeighbors(K, plotPatterns, makeListsOfNeighborsForAllTests, trainSet, testSet)
+    maxWarpingWindowPercentage = 0.33  # For testSet_a2, we need a bigger window to get the right patternIDs.
 
-    neighborsTestsLists[0].append("1500")
+    neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests, trainSet,
+                                                testSet)
 
     # patterns = ['15466', '15466', '15466', '58984', '58984', '96548', '58984', '58984']
 
@@ -52,13 +51,6 @@ def runClassification(K):
     # train_x, test_x, train_y, test_y = train_test_split(train_data[headers[2:4]], train_data[headers[-1]], train_size=0.7, test_size=0.3)
 
 
-
 if __name__ == '__main__':
-
-    dataSets = readDatasets.read_dataset(True, True, False)
-
-    trainSet = dataSets[0]
-    testSetA1 = dataSets[1]
-
     K = 5
     runClassification(K)

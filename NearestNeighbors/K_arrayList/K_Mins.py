@@ -10,8 +10,9 @@ class KMins:
 
 
     def setMaxIndexOfArrayList(self):
-        new_max_cost = 0
-        for i in range(0, self.arrayListLength):
+        self.max_cost_index = 0
+        new_max_cost = self.k_mins_arrayList[self.max_cost_index][2]
+        for i in range(1, self.arrayListLength):
             if self.k_mins_arrayList[i][2] > new_max_cost:
                 new_max_cost = self.k_mins_arrayList[i][2]
                 self.max_cost_index = i
@@ -27,7 +28,7 @@ class KMins:
         else:
             # If the given triple's cost is lessThan the array's max.. (that's the most common case)
             if new_triple[2] < self.k_mins_arrayList[self.max_cost_index][2]:
-                # Replace max with given cost and find the new max (the "new_triple" it's uncertain if it's the new max).
+                # Replace current-max with given cost and find the new max (the "new_triple" it's uncertain if it's the new max itself).
                 self.k_mins_arrayList[self.max_cost_index] = new_triple
                 self.setMaxIndexOfArrayList()
 

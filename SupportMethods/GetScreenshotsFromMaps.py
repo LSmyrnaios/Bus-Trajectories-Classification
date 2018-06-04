@@ -3,10 +3,9 @@ import time
 from selenium import webdriver
 
 
-
 def getScreenshotsFromMaps():
 
-    cwd = os.getcwd()   # Current Working Directory. It's needed for many reasons
+    cwd = os.getcwd()   # Current Working Directory.
     driverFullPath = cwd + "/../Resources/maps/geckodriver.exe"
     driver = webdriver.Firefox(executable_path=driverFullPath)
 
