@@ -1,3 +1,4 @@
+import operator
 
 
 def getVotes(neighborsTestsLists):
