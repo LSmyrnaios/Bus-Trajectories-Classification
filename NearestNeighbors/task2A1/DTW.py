@@ -39,21 +39,6 @@ class Dtw(object):
         self.max_warping_window_percentage = max_warping_window_percentage
         self.subsample_step = subsample_step
 
-    def fit(self, x, l):
-        """Fit the model using x as training data and l as class labels
-
-        Arguments
-        ---------
-        x : array of shape [n_samples, n_timepoints]
-            Training data set for input into KNN classifer
-
-        l : array of shape [n_samples]
-            Training labels for input into KNN classifier
-        """
-
-        self.x = x
-        self.l = l
-
 
     def _dtw_distance(self, ts_a, ts_b, d=lambda x, y: abs(x - y)):
         """Returns the DTW similarity distance between two 2-D
@@ -81,48 +66,7 @@ class Dtw(object):
 
         max_warping_window = int(N*self.max_warping_window_percentage)
 
-
-        #print '1) Array1 len: ' + M.__str__() + ' Array2 len: ' + N.__str__()
-        #print '2) Array1 len: ' + ts_a.shape.__str__() + ' Array2 len: ' + ts_b.shape.__str__()
         cost = sys.maxint * np.ones((M, N))
-
-        # Given code.
-        # # Initialize the first row and column
-        # cost[0, 0] = d(ts_a[0][0], ts_b[0][0])
-        # for i in xrange(1, M):
-        #      cost[i, 0] = cost[i - 1, 0] + d(ts_a[i][0], ts_b[0][0])
-        #
-        # for j in xrange(1, N):
-        #     cost[0, j] = cost[0, j - 1] + d(ts_a[0][0], ts_b[j][0])
-        #
-        # # Populate rest of cost matrix within window
-        # for i in xrange(1, M):
-        #     for j in xrange(max(1, i - self.max_warping_window),
-        #                     min(N, i + self.max_warping_window)):
-        #         choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
-        #         cost[i, j] = min(choices) + d(ts_a[i][0], ts_b[j][0])
-        #
-        # # Return DTW distance given window
-        # return cost[-1, -1]
-
-        # Given code with our Haversine where needed.
-        # Initialize the first row and column
-        # for i in xrange(1, M):
-        #     cost[i, 0] = float('Inf') #cost[i - 1, 0] + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[0][1], ts_b[0][2])
-        #
-        # for j in xrange(1, N):
-        #     cost[0, j] = float('Inf') #cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
-        #
-        # cost[0, 0] = 0  # HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
-        #
-        # # Populate rest of cost matrix within window
-        # for i in xrange(1, M):
-        #      for j in xrange(1, N): # max(1, i - self.max_warping_window), min(N, i + self.max_warping_window)
-        #         choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
-        #         cost[i, j] = min(choices) + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
-        #
-        # # Return DTW distance given window
-        # return cost[-1, -1]
 
         # Wikipedia-s code with our Haversine where needed.
         for i in xrange(0, M):
@@ -137,7 +81,7 @@ class Dtw(object):
                 choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
                 cost[i, j] = min(choices) + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
 
-        # Return DTW distance given window
+        # Return DTW distance
         return cost[-1, -1]
 
 
@@ -166,14 +110,10 @@ class Dtw(object):
             x_s = shape(x)
             dm = np.zeros((x_s[0] * (x_s[0] - 1)) // 2, dtype=np.double)
 
-            # p = ProgressBar(shape(dm)[0])
-
             for i in xrange(0, x_s[0] - 1):
                 for j in xrange(i + 1, x_s[0]):
                     dm[dm_count] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
-                    dm_count += 1   # This is needed above..
-                    # Update progress bar
-                    # p.animate(dm_count)
+                    dm_count += 1
 
             # Convert to squareform
             dm = squareform(dm)
@@ -186,16 +126,28 @@ class Dtw(object):
             dm = np.zeros((x_s[0], y_s[0]))
             dm_size = x_s[0] * y_s[0]
 
-            #p = ProgressBar(dm_size)
-
             for i in xrange(0, x_s[0]):
                 for j in xrange(0, y_s[0]):
                     dm[i, j] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
-                    # Update progress bar
-                    # dm_count += 1
-                    #p.animate(dm_count)
 
             return dm
+
+
+    def fit(self, x, l):
+        """Fit the model using x as training data and l as class labels
+
+        Arguments
+        ---------
+        x : array of shape [n_samples, n_timepoints]
+            Training data set for input into KNN classifer
+
+        l : array of shape [n_samples]
+            Training labels for input into KNN classifier
+        """
+
+        self.x = x
+        self.l = l
+
 
     def predict(self, x):
         """Predict the class labels or probability estimates for
@@ -227,40 +179,3 @@ class Dtw(object):
         # mode_proba = mode_data[1] / self.n_neighbors
         #
         # return mode_label.ravel(), mode_proba.ravel()
-
-
-class ProgressBar:
-    """This progress bar was taken from PYMC
-    """
-    def __init__(self, iterations):
-        self.iterations = iterations
-        self.prog_bar = '[]'
-        self.fill_char = '*'
-        self.width = 40
-        self.__update_amount(0)
-        if have_ipython:
-            self.animate = self.animate_ipython
-        else:
-            self.animate = self.animate_noipython
-
-    def animate_ipython(self, iter):
-        print '\r', self,
-        sys.stdout.flush()
-        self.update_iteration(iter + 1)
-
-    def update_iteration(self, elapsed_iter):
-        self.__update_amount((elapsed_iter / float(self.iterations)) * 100.0)
-        self.prog_bar += '  %d of %s complete' % (elapsed_iter, self.iterations)
-
-    def __update_amount(self, new_amount):
-        percent_done = int(round((new_amount / 100.0) * 100.0))
-        all_full = self.width - 2
-        num_hashes = int(round((percent_done / 100.0) * all_full))
-        self.prog_bar = '[' + self.fill_char * num_hashes + ' ' * (all_full - num_hashes) + ']'
-        pct_place = (len(self.prog_bar) // 2) - len(str(percent_done))
-        pct_string = '%d%%' % percent_done
-        self.prog_bar = self.prog_bar[0:pct_place] + \
-            (pct_string + self.prog_bar[pct_place + len(pct_string):])
-
-    def __str__(self):
-        return str(self.prog_bar)

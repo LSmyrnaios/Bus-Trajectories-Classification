@@ -39,7 +39,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         #     print 'InfCount: ' + inf_costs_count.__str__()
         #     break
 
-        print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__()
+        print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__() + '..'
 
         # print trajectoryTest # DEBUG!
         min_cost = 1000
@@ -114,7 +114,7 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
             sorted_nearestNeighbors_forAllTests.append(sorted_nearestNeighbors_fortest)
 
 
-    print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins'
+    print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))
 
     return sorted_nearestNeighbors_forAllTests
 
