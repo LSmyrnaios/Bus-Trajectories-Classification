@@ -44,11 +44,7 @@ def runLCSS(K, useAllLCSs):
         sorted_subSequences =[]
 
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
-            # print 'I am a happy little train...'
             # print i
-
-            # if i <= 380 or (i >= 400 and i <= 500):
-            #     continue
 
             trajectoryTrain = trainTrajs[i]
 

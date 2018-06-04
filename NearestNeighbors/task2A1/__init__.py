@@ -15,21 +15,25 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
     if not os.path.isdir(storeMapsDir):
         os.makedirs(storeMapsDir)
 
+    max_warping = 0.11
+    dtw = Dtw(max_warping_window_percentage=max_warping)
+    kMins = KMins(K)
+
+    sorted_nearestNeighbors_forAllTests = []
+    inf_costs_count = 0
+    testNum = 0
+
     start_time = time.time()
     lastTime = start_time   # For in-the-middle elapsed-time.
 
-    dtw = Dtw(max_warping_window_percentage=0.33)
-    kMins = KMins(K)
-
-    sorted_nearestNeighbors_foralltests = []
-
-    inf_costs_count = 0
-
-    testNum = 0
     for trajectoryTest in testSet['Trajectory']:
 
+        inf_costs_count = 0
+
         testNum += 1
-        # if testNum < 2:
+        # if testNum != 5:
+        #     continue
+        # if testNum <= 4:
         #     continue
         # if testNum == 3:
         #     print 'InfCount: ' + inf_costs_count.__str__()
@@ -42,14 +46,12 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         minJourneyPatternId = ''
         min_i = 0
 
-        print testNum.__str__() + ')' + ' curInfCount: ' + inf_costs_count.__str__()
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
 
             # if i == 1500:
             #     break
 
             trajectoryTrain = trainTrajs[i]
-
             curPatternID = journeyPatternIDs[i]
 
             cost = dtw._dtw_distance(trajectoryTest, trajectoryTrain)
@@ -61,11 +63,11 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
                 inf_costs_count += 1
                 continue
 
-            if cost <= 5.0:
-                print testNum.__str__() + '-' + i.__str__() + ') Cost (lessOrEqual to 5.0): ' + cost.__str__()\
-                      + ' from  journeyPatternID: ' + minJourneyPatternId.__str__()
-
             kMins.checkMaxCostAndInsert([i, curPatternID, cost])
+
+            # if not makeListOfAllNeighbors and cost <= 25.5:
+            #     print testNum.__str__() + '-' + i.__str__() + ') Cost (lessOrEqual to 25.5): ' + cost.__str__()\
+            #           + ' from  journeyPatternID: ' + minJourneyPatternId.__str__()
 
             if cost < min_cost:
                 min_cost = cost
@@ -78,13 +80,15 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
         curElapsedTime = curTime - lastTime
         lastTime = curTime
 
-        sorted_nearestNeighbors = sorted(kMins.getArray(), key=lambda tup: tup[2])
+        sorted_nearestNeighbors = sorted(kMins.getArrayList(), key=lambda tup: tup[2])
+        kMins.resetArrayList()  # Reset arrayList before going to the next testSet.
 
         print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
-              + '\nMin_journeyPatternId: ' + minJourneyPatternId.__str__() + ' Min_i: ' + min_i.__str__() + ' Min_cost: ' + min_cost.__str__()\
-              + '\nSorted mins: '
+            + '\nMax warping window percentage: ' + max_warping.__str__() + '\n\'Inf\' costs found in this test: ' + inf_costs_count.__str__() \
+            + '\nMin_journeyPatternId: ' + minJourneyPatternId.__str__() + ' Min_i: ' + min_i.__str__() + ' Min_cost: ' + min_cost.__str__() \
+            + '\nSorted mins: '
         for i in range(0, K):
-            print  "i: ", sorted_nearestNeighbors[i][0], " PatternID: ", sorted_nearestNeighbors[i][1], " , cost: ", sorted_nearestNeighbors[i][2]
+            print "i: ", sorted_nearestNeighbors[i][0], " PatternID: ", sorted_nearestNeighbors[i][1], " , cost: ", sorted_nearestNeighbors[i][2]
 
         if plotPatterns:
             # Plot test
@@ -107,12 +111,12 @@ def findKnearestNeighbors(K, plotPatterns, makeListOfAllNeighbors, trainSet, tes
 
         if makeListOfAllNeighbors:
             # Make a list with all the neighbours for all the tests
-            sorted_nearestNeighbors_foralltests.append(sorted_nearestNeighbors_fortest)
+            sorted_nearestNeighbors_forAllTests.append(sorted_nearestNeighbors_fortest)
 
 
     print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins'
 
-    return sorted_nearestNeighbors_foralltests
+    return sorted_nearestNeighbors_forAllTests
 
 
 if __name__ == '__main__':
