@@ -5,14 +5,6 @@ from scipy.spatial.distance import squareform
 from SupportMethods import HaversineDist
 
 
-try:
-    from IPython.display import clear_output
-
-    have_ipython = True
-except ImportError:
-    have_ipython = False
-
-
 class Dtw(object):
     """K-nearest neighbor classifier using dynamic time warping
     as the distance measure between pairs of time series arrays

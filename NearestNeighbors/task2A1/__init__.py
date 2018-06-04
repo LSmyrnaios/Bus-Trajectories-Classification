@@ -93,7 +93,8 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
         if plotPatterns:
             # Plot test
             longtitutes, latitudes = GetCoordinates.getCoordinates(trajectoryTest)
-            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__() + "-test.html", zoom=13)
+            GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
+                          + "-test-Time(sec)_" + curElapsedTime.__str__() + ".html", zoom=13)
 
         sorted_nearestNeighbors_forTest = []
         # Plot trains
@@ -109,10 +110,10 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
                 curTrainTrajectory = trainTrajs[sorted_nearestNeighbors[i][0]]
                 longtitutes, latitudes = GetCoordinates.getCoordinates(curTrainTrajectory)
                 GmPlot.gmPlot(latitudes, longtitutes, storeMapsDir + "/dtw" + testNum.__str__()
-                              + "-train" + sorted_nearestNeighbors[i][0].__str__() + "-PatternID_"
-                              + sorted_nearestNeighbors[i][1].__str__() + "-DTW_"
-                              + sorted_nearestNeighbors[i][2].__str__()
-                              + "-Time(sec)_" + curElapsedTime.__str__() + ".html", zoom=13)
+                                + "-train" + sorted_nearestNeighbors[i][0].__str__() + "-PatternID_"
+                                + sorted_nearestNeighbors[i][1].__str__() + "-DTW_"
+                                + sorted_nearestNeighbors[i][2].__str__()
+                                + ".html", zoom=13)
 
         if makeListOfAllNeighbors:
             # Make a list with all the neighbours for all the tests

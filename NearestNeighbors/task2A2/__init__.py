@@ -7,7 +7,7 @@ from SupportMethods import readDatasets, TrainData, GetCoordinates
 from DataVisualisation import GmPlot
 
 
-def runLCSS(K, useAllLCSs):
+def runLCSS(K):
     print 'LCSS start..'
 
     dataSets = readDatasets.read_dataset(True, False, True)
@@ -44,57 +44,26 @@ def runLCSS(K, useAllLCSs):
 
         # print trajectoryTest # DEBUG!
         iterations = 0
-        subSequences = []
-        sorted_subSequences =[]
+        sorted_subSequences = []
 
         for i in range(0, trainListSize):  # IDs and Trajectories are of the same size.
             # print i
 
             trajectoryTrain = trainTrajs[i]
 
-            if useAllLCSs:
-                lists = lcs(trajectoryTrain, trajectoryTest, useAllLCSs)
-                if len(lists) == 1:
-                    if not lists[0]:
-                        continue
+            LongestCS = lcs(trajectoryTrain, trajectoryTest)
 
-                if iterations == 10:
-                    break
-                else:
-                    iterations += 1
+            if not LongestCS:
+                continue
+            # else:
+            #     print i.__str__() + ') LCS length: ' + len(LongestCS).__str__()
 
-                # here we have all most common subs
+            # if iterations == 10:
+            #     break
+            # else:
+            #     iterations += 1
 
-                max_common_points = -1
-                max_list = []
-
-                for index in range(0, len(lists)):
-                    if (len(lists[index]) > max_common_points):
-                        max_common_points = len(lists[index])
-                        max_list = lists[index]
-                    print lists[index]
-
-                if not max_list:
-                    continue
-                else:
-                    #subSequences.append((i, max_list, max_common_points))
-                    kMaxs.checkMinLengthAndInsert([i, max_list, max_common_points])
-
-            else:
-                LongestCS = lcs(trajectoryTrain, trajectoryTest, useAllLCSs)
-
-                if not LongestCS:
-                    continue
-                # else:
-                #     print i.__str__() + ') LCS length: ' + len(LongestCS).__str__()
-
-                # if iterations == 10:
-                #     break
-                # else:
-                #     iterations += 1
-
-                #subSequences.append((i, LongestCS, len(LongestCS)))
-                kMaxs.checkMinLengthAndInsert([i, LongestCS, len(LongestCS)])
+            kMaxs.checkMinLengthAndInsert([i, LongestCS, len(LongestCS)])
 
 
         curTime = time.time()
@@ -105,7 +74,8 @@ def runLCSS(K, useAllLCSs):
 
         # Plot test
         fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(trajectoryTest)
-        GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__() + "-test.html")
+        GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__()
+                        + "-test-Time(sec)_" + curElapsedTime.__str__() + ".html", zoom=13)
 
         # So now we pic the top 5 and we plot them....
         sorted_subSequences = sorted(kMaxs.getArrayList(), reverse=True, key=lambda tup: tup[2])
@@ -127,8 +97,7 @@ def runLCSS(K, useAllLCSs):
                                    storeMapsDir + "/lcss" + testNum.__str__() + "-train"
                                    + sorted_subSequences[i][0].__str__() + "_PatternID_"
                                    + journeyPatternIDs[sorted_subSequences[i][0]].__str__()
-                                   + "-MatchingPoints_" + sorted_subSequences[i][2].__str__()
-                                   + "-Time(sec)_" + curElapsedTime.__str__() + ".html")
+                                   + "-MatchingPoints_" + sorted_subSequences[i][2].__str__() + ".html")
 
 
     print "\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(
@@ -137,5 +106,4 @@ def runLCSS(K, useAllLCSs):
 
 if __name__ == '__main__':
     K = 5
-    useAllLCSs = False  # Should we retrieve all of the LCSS for each test or only the longest one? The last one is faster.
-    runLCSS(K, useAllLCSs)
+    runLCSS(K)
