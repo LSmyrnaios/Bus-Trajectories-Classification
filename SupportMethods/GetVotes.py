@@ -16,7 +16,8 @@ def getVotes(neighborsTestsLists):
                 classVotes[response] = 1
 
         sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
-        print sortedVotes
+
+        print '\nTest:', testNum, 'votes:\n', sortedVotes
 
         testData.append((testNum, sortedVotes[0][0]))
 
