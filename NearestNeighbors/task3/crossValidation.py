@@ -3,7 +3,7 @@ from SupportMethods import readDatasets
 from NearestNeighbors.task3.GetVotes import getVotes
 
 
-def crossValidation(K, maxWarpingWindowPercentage, trainSet, num_folds=10):
+def crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds):
 
     accuracies = []
     subset_size = len(trainSet)/num_folds
@@ -17,6 +17,9 @@ def crossValidation(K, maxWarpingWindowPercentage, trainSet, num_folds=10):
         training_this_round = training1 + training2#np.concatenate((training1, training2), axis=0)
 
         #print training2['journeyPatternId']
+
+        makeListsOfNeighborsForAllTests = True
+        plotPatterns = False  # We just want the KNN, not the html-maps.
 
         neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests,
                                                     training2, testing_this_round)

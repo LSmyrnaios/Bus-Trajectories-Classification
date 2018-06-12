@@ -28,7 +28,7 @@ def data_visualization(K):
     while True:
 
         if numOfSelectedPatterns == K:
-            print 'Finished ploting ' + K.__str__() + ' distinct random patterns.'
+            print 'Finished plotting ' + K.__str__() + ' distinct random patterns.'
             break
         elif (time.time() - start_time) > maxSecondsToWait:
             print 'The program could not find ' + K.__str__() + ' distinct random patterns in the specified time: ' + maxSecondsToWait.__str__()
