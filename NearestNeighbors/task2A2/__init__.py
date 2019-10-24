@@ -8,7 +8,7 @@ from DataVisualisation import GmPlot
 
 
 def runLCSS(K):
-    print 'LCSS start..'
+    print('LCSS start..')
 
     dataSets = readDatasets.read_dataset(True, False, True)
 
@@ -40,7 +40,7 @@ def runLCSS(K):
         nearestNeighbors = []
         sorted_subSeqsSizes = []
 
-        print '\nChecking for ' + K.__str__() + ' most-common sub-sequences of test ' + testNum.__str__()
+        print('\nChecking for ' + K.__str__() + ' longest common sub-sequences of test ' + testNum.__str__())
 
         # print trajectoryTest # DEBUG!
         iterations = 0
@@ -70,7 +70,7 @@ def runLCSS(K):
         curElapsedTime = curTime - lastTime
         lastTime = curTime
 
-        print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))
+        print('\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime)))
 
         # Plot test
         fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(trajectoryTest)
@@ -84,9 +84,9 @@ def runLCSS(K):
         for i in range(0, len(sorted_subSequences)):
             if i == 5: break
 
-            print "Train " + sorted_subSequences[i][0].__str__() + ") PatternID: "\
+            print("Train " + sorted_subSequences[i][0].__str__() + ") PatternID: "\
                 + journeyPatternIDs[sorted_subSequences[i][0]].__str__()\
-                + ", MatchingPoints: " + sorted_subSequences[i][2].__str__() + ".html"
+                + ", MatchingPoints: " + sorted_subSequences[i][2].__str__() + ".html")
 
             curSubSeqTrajectory = trainTrajs[sorted_subSequences[i][0]]
             fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
@@ -100,8 +100,8 @@ def runLCSS(K):
                                    + "-MatchingPoints_" + sorted_subSequences[i][2].__str__() + ".html")
 
 
-    print "\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(
-        time.time() - start_time)), 'mins'
+    print("\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(
+        time.time() - start_time)), 'mins')
 
 
 if __name__ == '__main__':

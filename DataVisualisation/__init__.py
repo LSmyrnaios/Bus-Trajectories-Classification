@@ -1,8 +1,9 @@
-import task1
+from . import task1
 
 
 def runVisualzation():
-    task1.data_visualization()
+    k = 5
+    task1.data_visualization(k)
 
 
 if __name__ == '__main__':

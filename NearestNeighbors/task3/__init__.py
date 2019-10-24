@@ -7,9 +7,9 @@ from SupportMethods.writePredictionsToCsv import write_predictions_to_csv
 
 def runClassification(K):
 
-    print 'Start KNN Classification..'
+    print('Start KNN Classification..')
 
-    dataSets = readDatasets.read_dataset(True, False, True)
+    dataSets = readDatasets.read_dataset(True, False, True, '../../')
     trainSet = dataSets[0]
     testSet = dataSets[1]
 
@@ -19,17 +19,17 @@ def runClassification(K):
     maxWarpingWindowPercentage = 0.33  # For testSet_a2, we need a bigger window to get the right patternIDs.
 
 
-    # Run KNN for test_a2
+    ### Run KNN for test_a2
 
-    neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests,
-                                                trainSet, testSet)
+    neighborsTestsLists = findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListsOfNeighborsForAllTests,  trainSet, testSet)
 
     testData = getVotes(neighborsTestsLists)
 
     write_predictions_to_csv(testData)
 
-    # Run cross-validation.
-    crossValidation(K, maxWarpingWindowPercentage, trainSet, num_folds=10)
+    ### Run cross-validation.
+    # TODO: fix the errors in the crossvalidation function below
+    # crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds=10)
 
 
 if __name__ == '__main__':

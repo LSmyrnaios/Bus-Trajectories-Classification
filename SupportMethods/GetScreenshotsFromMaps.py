@@ -4,8 +4,7 @@ from selenium import webdriver
 
 
 def getScreenshotsFromMaps():
-
-    cwd = os.getcwd()   # Current Working Directory.
+    cwd = os.getcwd()  # Current Working Directory.
     driverFullPath = cwd + "/../Resources/maps/geckodriver.exe"
     driver = webdriver.Firefox(executable_path=driverFullPath)
 
@@ -17,11 +16,11 @@ def getScreenshotsFromMaps():
             os.makedirs(imagesDir)
         for fileName in os.listdir(task1Path):
             if ".html" in fileName:
-                print 'Getting screenshot from: ..task1/' + fileName
+                print('Getting screenshot from: ..task1/' + fileName)
                 fileFullPath = "file:///" + cwd + "/" + task1Path + "/" + fileName
-                #print fileFullPath
+                # print fileFullPath
                 driver.get(fileFullPath)
-                time.sleep(2)   # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
+                time.sleep(2)  # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
                 fileName = fileName.replace(".html", "")
                 driver.save_screenshot(imagesDir + "/" + fileName + '.png')
 
@@ -33,7 +32,7 @@ def getScreenshotsFromMaps():
             os.makedirs(imagesDir)
         for fileName in os.listdir(task2A1Path):
             if ".html" in fileName:
-                print 'Getting screenshot from: ..task2A1/' + fileName
+                print('Getting screenshot from: ..task2A1/' + fileName)
                 fileFullPath = "file:///" + cwd + "/" + task2A1Path + "/" + fileName
                 driver.get(fileFullPath)
                 time.sleep(2)  # Wait for the driver to render the html.
@@ -48,7 +47,7 @@ def getScreenshotsFromMaps():
             os.makedirs(imagesDir)
         for fileName in os.listdir(task2A2Path):
             if ".html" in fileName:
-                print 'Getting screenshot from: ..task2A2/' + fileName
+                print('Getting screenshot from: ..task2A2/' + fileName)
                 fileFullPath = "file:///" + cwd + "/" + task2A2Path + "/" + fileName
                 driver.get(fileFullPath)
                 time.sleep(2)  # Wait for the driver to render the html.

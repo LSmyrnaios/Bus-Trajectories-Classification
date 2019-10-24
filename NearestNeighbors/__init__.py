@@ -17,7 +17,7 @@ def runA1andA2():
     task2A1.findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListOfAllNeighbors, trainSet, testSet)
 
     # This doesn't take any dataSets as parameters.. i gets the in its own
-    task2A2.runLCSS(K, False)
+    task2A2.runLCSS(K) #, False)
 
 
 if __name__ == '__main__':

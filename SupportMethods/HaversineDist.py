@@ -11,7 +11,7 @@ def haversine(lon1, lat1, lon2, lat2):
     # print "Calculating distance between (lon1, lat1)", lon1, lat1, " and (lon2, lat2)", lon2, lat2, "\n"
 
     # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    lon1, lat1, lon2, lat2 = list(map(radians, [lon1, lat1, lon2, lat2]))
 
     # haversine formula
     dlon = lon2 - lon1
@@ -36,4 +36,4 @@ if __name__ == '__main__':
 
     distance = haversine(lon1, lat1, lon2, lat2)
 
-    print("Distance: ", distance)
+    print(("Distance: ", distance))

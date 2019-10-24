@@ -3,7 +3,7 @@ import NearestNeighbors
 
 
 if __name__ == '__main__':
-    DataVisualisation.data_visualization()
+    DataVisualisation.runVisualzation()
 
     K = 5
-    NearestNeighbors.findKnearestNeighbors(K)
+    NearestNeighbors.runA1andA2()

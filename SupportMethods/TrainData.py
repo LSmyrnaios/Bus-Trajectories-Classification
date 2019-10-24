@@ -1,7 +1,7 @@
 from SupportMethods import readDatasets
 
-def getListsOfTrainData(trainSet):
 
+def getListsOfTrainData(trainSet):
     journeyPatternIDs, trainTrajs = [], []
 
     for row in trainSet['journeyPatternId']:
@@ -18,7 +18,6 @@ def getListsOfTrainData(trainSet):
 
 
 if __name__ == '__main__':
-
     dataSets = readDatasets.read_dataset(True, True, False)
     trainSet = dataSets[0]
     testSetA1 = dataSets[1]

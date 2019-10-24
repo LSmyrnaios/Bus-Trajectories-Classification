@@ -28,10 +28,10 @@ def data_visualization(K):
     while True:
 
         if numOfSelectedPatterns == K:
-            print 'Finished plotting ' + K.__str__() + ' distinct random patterns.'
+            print('Finished plotting ' + K.__str__() + ' distinct random patterns.')
             break
         elif (time.time() - start_time) > maxSecondsToWait:
-            print 'The program could not find ' + K.__str__() + ' distinct random patterns in the specified time: ' + maxSecondsToWait.__str__()
+            print('The program could not find ' + K.__str__() + ' distinct random patterns in the specified time: ' + maxSecondsToWait.__str__())
             break
 
         randomTrain = random.randint(0, trainListSize-1)
@@ -39,7 +39,7 @@ def data_visualization(K):
         if curPatternID not in selectedPatternIDs:
             selectedPatternIDs.append(curPatternID)
             # plot the new pattern
-            print 'Going to plot a new random train..'
+            print('Going to plot a new random train..')
             longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomTrain])
             GmPlot.gmPlot(latitudes, longtitutes,
                           storeMapsDir + "/train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html")

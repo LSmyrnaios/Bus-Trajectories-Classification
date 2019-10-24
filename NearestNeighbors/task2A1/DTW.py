@@ -26,11 +26,10 @@ class Dtw(object):
 
     def __init__(self, n_neighbors=5, max_warping_window_percentage=0.7, subsample_step=1):
         self.n_neighbors = n_neighbors
-        if max_warping_window_percentage > 1.0:   # If the percentage given is not a decimal below zero... make it like it.
-            max_warping_window_percentage = max_warping_window_percentage/100
+        if max_warping_window_percentage > 1.0:  # If the percentage given is not a decimal below zero... make it like it.
+            max_warping_window_percentage = max_warping_window_percentage / 100
         self.max_warping_window_percentage = max_warping_window_percentage
         self.subsample_step = subsample_step
-
 
     def _dtw_distance(self, ts_a, ts_b, d=lambda x, y: abs(x - y)):
         """Returns the DTW similarity distance between two 2-D
@@ -56,26 +55,26 @@ class Dtw(object):
         ts_a, ts_b = np.array(ts_a), np.array(ts_b)
         M, N = len(ts_a), len(ts_b)
 
-        max_warping_window = int(N*self.max_warping_window_percentage)
+        max_warping_window = int(N * self.max_warping_window_percentage)
 
-        cost = sys.maxint * np.ones((M, N))
+        cost = sys.maxsize * np.ones((M, N))
 
         # Wikipedia-s code with our Haversine where needed.
-        for i in xrange(0, M):
-            for j in xrange(0, N):
-                cost[i, j] = float('Inf') #cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
+        for i in range(0, M):
+            for j in range(0, N):
+                cost[i, j] = float(
+                    'Inf')  # cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
 
         cost[0, 0] = 0  # HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
 
         # Populate rest of cost matrix within window
-        for i in xrange(1, M):
-            for j in xrange(max(1, i - max_warping_window), min(N, i + max_warping_window)):
+        for i in range(1, M):
+            for j in range(max(1, i - max_warping_window), min(N, i + max_warping_window)):
                 choices = cost[i - 1, j - 1], cost[i, j - 1], cost[i - 1, j]
                 cost[i, j] = min(choices) + HaversineDist.haversine(ts_a[i][1], ts_a[i][2], ts_b[j][1], ts_b[j][2])
 
         # Return DTW distance
         return cost[-1, -1]
-
 
     def _dist_matrix(self, x, y):
         """Computes the M x N distance matrix between the training
@@ -102,8 +101,8 @@ class Dtw(object):
             x_s = shape(x)
             dm = np.zeros((x_s[0] * (x_s[0] - 1)) // 2, dtype=np.double)
 
-            for i in xrange(0, x_s[0] - 1):
-                for j in xrange(i + 1, x_s[0]):
+            for i in range(0, x_s[0] - 1):
+                for j in range(i + 1, x_s[0]):
                     dm[dm_count] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
                     dm_count += 1
 
@@ -118,12 +117,11 @@ class Dtw(object):
             dm = np.zeros((x_s[0], y_s[0]))
             dm_size = x_s[0] * y_s[0]
 
-            for i in xrange(0, x_s[0]):
-                for j in xrange(0, y_s[0]):
+            for i in range(0, x_s[0]):
+                for j in range(0, y_s[0]):
                     dm[i, j] = self._dtw_distance(x[i, ::self.subsample_step], y[j, ::self.subsample_step])
 
             return dm
-
 
     def fit(self, x, l):
         """Fit the model using x as training data and l as class labels
@@ -139,7 +137,6 @@ class Dtw(object):
 
         self.x = x
         self.l = l
-
 
     def predict(self, x):
         """Predict the class labels or probability estimates for

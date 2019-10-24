@@ -9,7 +9,7 @@ from DataVisualisation import GmPlot
 
 def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListOfAllNeighbors, trainSet, testSet):
 
-    print 'KNN-with-DTW starts..'
+    print('KNN-with-DTW starts..')
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
@@ -41,7 +41,7 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
         #     print 'InfCount: ' + inf_costs_count.__str__()
         #     break
 
-        print '\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__() + '..'
+        print('\nChecking for ' + K.__str__() + ' nearest-neighbors of test ' + testNum.__str__() + '..')
 
         # print trajectoryTest # DEBUG!
         min_cost = 1000
@@ -75,8 +75,8 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
                 min_cost = cost
                 min_i = i
                 minJourneyPatternId = curPatternID
-                print testNum.__str__() + '-' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()\
-                      + ' from journeyPatternID: ' + minJourneyPatternId.__str__()
+                print(testNum.__str__() + '-' + min_i.__str__() + ') Found new minCost: ' + min_cost.__str__()\
+                      + ' from journeyPatternID: ' + minJourneyPatternId.__str__())
 
         curTime = time.time()
         curElapsedTime = curTime - lastTime
@@ -85,10 +85,10 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
         sorted_nearestNeighbors = sorted(kMins.getArrayList(), key=lambda tup: tup[2])
         kMins.resetArrayList()  # Reset arrayList before going to the next testSet.
 
-        print '\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
+        print('\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime))\
             + '\nMax warping window percentage: ' + maxWarpingWindowPercentage.__str__() + '\n\'Inf\' costs found in this test: ' + inf_costs_count.__str__() \
             + '\nMin_journeyPatternId: ' + minJourneyPatternId.__str__() + ' Min_i: ' + min_i.__str__() + ' Min_cost: ' + min_cost.__str__() \
-            + '\nSorted mins: '
+            + '\nSorted mins: ')
 
         if plotPatterns:
             # Plot test
@@ -100,8 +100,8 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
         # Plot trains
         for i in range(0, len(sorted_nearestNeighbors)):
 
-            print "i: ", sorted_nearestNeighbors[i][0], ", PatternID: ", sorted_nearestNeighbors[i][1]\
-                , ", DTW-cost: ", sorted_nearestNeighbors[i][2]
+            print("i: ", sorted_nearestNeighbors[i][0], ", PatternID: ", sorted_nearestNeighbors[i][1]\
+                , ", DTW-cost: ", sorted_nearestNeighbors[i][2])
 
             # Make a list with all the neighbours
             if makeListOfAllNeighbors:
@@ -120,7 +120,7 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
             sorted_nearestNeighbors_forAllTests.append(sorted_nearestNeighbors_forTest)
 
 
-    print "\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))
+    print("\nElapsed time of KNNwithDTW for 'test_set_a1': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
 
     return sorted_nearestNeighbors_forAllTests
 

@@ -4,9 +4,9 @@ import numpy as np
 
 
 def get_scores_from_cross_validation(clf, vector_train, train_y):
-
     scoring = ['precision_macro', 'recall_macro', 'f1_macro', 'accuracy']
-    predicted = cross_validate(clf, vector_train, train_y, cv=10, n_jobs=multiprocessing.cpu_count(), scoring=scoring, return_train_score=False)
+    predicted = cross_validate(clf, vector_train, train_y, cv=10, n_jobs=multiprocessing.cpu_count(), scoring=scoring,
+                               return_train_score=False)
 
     # print("Accuracy: %0.2f (+/- %0.2f)" % (predicted.mean(), predicted.std() * 2))
     # print sorted(predicted.keys())
@@ -26,9 +26,9 @@ def get_scores_from_cross_validation(clf, vector_train, train_y):
     prediced_f_measure = np.mean(predicted["test_f1_macro"])
 
     # DEBUG PRINT!
-    print "Accuracy: ", predicted_accuracy, \
-        "/ Precision: ", predicted_percision, \
-        "/ Recall: ", predicted_recall, \
-        "/ F-Measure: ", prediced_f_measure
+    print("Accuracy: ", predicted_accuracy,
+          "/ Precision: ", predicted_percision,
+          "/ Recall: ", predicted_recall,
+          "/ F-Measure: ", prediced_f_measure)
 
     return [predicted_accuracy, predicted_percision, predicted_recall, prediced_f_measure]

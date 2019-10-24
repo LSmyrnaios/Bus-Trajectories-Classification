@@ -73,7 +73,7 @@ def runLCSStest():
 
 
     for l in lists:
-        print l
+        print(l)
 
 
 if __name__ == "__main__":
