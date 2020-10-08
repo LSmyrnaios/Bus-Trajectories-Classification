@@ -37,3 +37,4 @@ if __name__ == '__main__':
     distance = haversine(lon1, lat1, lon2, lat2)
 
     print(("Distance: ", distance))
+    exit()

@@ -3,7 +3,12 @@ import NearestNeighbors
 
 
 if __name__ == '__main__':
-    DataVisualisation.runVisualzation()
 
     K = 5
-    NearestNeighbors.runA1andA2()
+    dynamic_datasets_path = ''
+
+    DataVisualisation.runVisualzation(K, dynamic_datasets_path)
+
+    NearestNeighbors.runA1andA2(K, dynamic_datasets_path)
+
+    exit()

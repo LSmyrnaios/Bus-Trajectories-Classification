@@ -3,21 +3,20 @@ import time
 
 from NearestNeighbors.K_arrayList.K_Maxs import KMaxs
 from NearestNeighbors.task2A2.LCSS import lcs
-from SupportMethods import readDatasets, TrainData, GetCoordinates
-from DataVisualisation import GmPlot
+from SupportMethods import readDatasets, TrainData, GetCoordinates, GmPlot
 
 
-def runLCSS(K):
-    print('LCSS start..')
+def runLCSS(K, dynamic_datasets_path):
+    print('\nLCSS start..')
 
-    dataSets = readDatasets.read_dataset(True, False, True)
+    dataSets = readDatasets.read_dataset(True, False, True, dynamic_datasets_path)
 
     trainSet = dataSets[0]
     testSetA2 = dataSets[1]
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
-    storeMapsDir = "../../Resources/maps/task2A2"
+    storeMapsDir = os.path.join('..', '..', 'Resources', 'maps', 'task2A2')
     if not os.path.isdir(storeMapsDir):
         os.makedirs(storeMapsDir)
 
@@ -65,7 +64,6 @@ def runLCSS(K):
 
             kMaxs.checkMinLengthAndInsert([i, LongestCS, len(LongestCS)])
 
-
         curTime = time.time()
         curElapsedTime = curTime - lastTime
         lastTime = curTime
@@ -73,9 +71,9 @@ def runLCSS(K):
         print('\nTest: ' + testNum.__str__() + ') finished in ' + time.strftime("%H:%M:%S", time.gmtime(curElapsedTime)))
 
         # Plot test
-        fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(trajectoryTest)
-        GmPlot.gmPlot(fullLatitudes, fullLongtitutes, storeMapsDir + "/lcss" + testNum.__str__()
-                        + "-test-Time(sec)_" + curElapsedTime.__str__() + ".html", zoom=13)
+        full_longitudes, full_latitudes = GetCoordinates.getCoordinates(trajectoryTest)
+        fileName = "lcss" + testNum.__str__() + "-test-Time(sec)_" + curElapsedTime.__str__() + ".html"
+        GmPlot.gmPlot(full_latitudes, full_longitudes, os.path.join(storeMapsDir, fileName), zoom=13)
 
         # So now we pic the top 5 and we plot them....
         sorted_subSequences = sorted(kMaxs.getArrayList(), reverse=True, key=lambda tup: tup[2])
@@ -84,26 +82,26 @@ def runLCSS(K):
         for i in range(0, len(sorted_subSequences)):
             if i == 5: break
 
-            print("Train " + sorted_subSequences[i][0].__str__() + ") PatternID: "\
-                + journeyPatternIDs[sorted_subSequences[i][0]].__str__()\
-                + ", MatchingPoints: " + sorted_subSequences[i][2].__str__() + ".html")
+            print("Train " + sorted_subSequences[i][0].__str__() + ") PatternID: " \
+                  + journeyPatternIDs[sorted_subSequences[i][0]].__str__() \
+                  + ", MatchingPoints: " + sorted_subSequences[i][2].__str__() + ".html")
 
             curSubSeqTrajectory = trainTrajs[sorted_subSequences[i][0]]
-            fullLongtitutes, fullLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
+            full_longitudes, full_latitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
 
             curSubSeqTrajectory = sorted_subSequences[i][1]
-            subLongtitutes, subLatitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
-            GmPlot.gmPlotOfColours(fullLatitudes, fullLongtitutes, subLatitudes, subLongtitutes,
-                                   storeMapsDir + "/lcss" + testNum.__str__() + "-train"
-                                   + sorted_subSequences[i][0].__str__() + "_PatternID_"
-                                   + journeyPatternIDs[sorted_subSequences[i][0]].__str__()
-                                   + "-MatchingPoints_" + sorted_subSequences[i][2].__str__() + ".html")
+            sub_longitudes, sub_latitudes = GetCoordinates.getCoordinates(curSubSeqTrajectory)
+            fileName = "lcss" + testNum.__str__() + "-train" \
+                       + sorted_subSequences[i][0].__str__() + "_PatternID_" \
+                       + journeyPatternIDs[sorted_subSequences[i][0]].__str__() \
+                       + "-MatchingPoints_" + sorted_subSequences[i][2].__str__() + ".html"
+            GmPlot.gmPlotOfColours(full_latitudes, full_longitudes, sub_latitudes, sub_longitudes, os.path.join(storeMapsDir, fileName))
 
-
-    print("\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(
-        time.time() - start_time)), 'mins')
+    print("\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins')
 
 
 if __name__ == '__main__':
     K = 5
-    runLCSS(K)
+    dynamic_datasets_path = os.path.join('..', '..')
+    runLCSS(K, dynamic_datasets_path)
+    exit()

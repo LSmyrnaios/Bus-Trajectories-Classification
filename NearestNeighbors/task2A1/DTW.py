@@ -14,7 +14,7 @@ class Dtw(object):
     n_neighbors : int, optional (default = 5)
         Number of neighbors to use by default for KNN
 
-    max_warping_window : int, optional (default = infinity)
+    max_warping_window_percentage : int, optional (default = infinity)
         Maximum warping window allowed by the DTW dynamic
         programming function
 
@@ -62,8 +62,7 @@ class Dtw(object):
         # Wikipedia-s code with our Haversine where needed.
         for i in range(0, M):
             for j in range(0, N):
-                cost[i, j] = float(
-                    'Inf')  # cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
+                cost[i, j] = float('Inf')   # cost[0, j - 1] + HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[j][1], ts_b[j][2])
 
         cost[0, 0] = 0  # HaversineDist.haversine(ts_a[0][1], ts_a[0][2], ts_b[0][1], ts_b[0][2])
 
@@ -97,7 +96,7 @@ class Dtw(object):
 
         # Compute condensed distance matrix (upper triangle) of pairwise dtw distances
         # when x and y are the same array
-        if (np.array_equal(x, y)):
+        if np.array_equal(x, y):
             x_s = shape(x)
             dm = np.zeros((x_s[0] * (x_s[0] - 1)) // 2, dtype=np.double)
 
@@ -129,7 +128,7 @@ class Dtw(object):
         Arguments
         ---------
         x : array of shape [n_samples, n_timepoints]
-            Training data set for input into KNN classifer
+            Training data set for input into KNN classifier
 
         l : array of shape [n_samples]
             Training labels for input into KNN classifier

@@ -1,13 +1,13 @@
 import os
 import random
 import time
-from DataVisualisation import GmPlot
-from SupportMethods import GetCoordinates, readDatasets, TrainData
+from SupportMethods import GetCoordinates, readDatasets, TrainData, GmPlot
 
 
-def data_visualization(K):
+def data_visualization(K, dynamic_datasets_path):
 
-    dataSets = readDatasets.read_dataset(True, False, False)
+    print("Going to visualize bus-trajectories..")
+    dataSets = readDatasets.read_dataset(True, False, False, dynamic_datasets_path)
     trainSet = dataSets[0]
 
     #print trainSet.shape[0]  # DEBUG!
@@ -15,7 +15,7 @@ def data_visualization(K):
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
-    storeMapsDir = "../../Resources/maps/task1"
+    storeMapsDir = os.path.join('..', '..', 'Resources', 'maps', 'task1')
     if not os.path.isdir(storeMapsDir):
         os.makedirs(storeMapsDir)
 
@@ -40,12 +40,14 @@ def data_visualization(K):
             selectedPatternIDs.append(curPatternID)
             # plot the new pattern
             print('Going to plot a new random train..')
-            longtitutes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomTrain])
-            GmPlot.gmPlot(latitudes, longtitutes,
-                          storeMapsDir + "/train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html")
+            longitudes, latitudes = GetCoordinates.getCoordinates(trainTrajs[randomTrain])
+            fileName = "train" + randomTrain.__str__() + "_Pattern_" + curPatternID + ".html"
+            GmPlot.gmPlot(latitudes, longitudes, os.path.join(storeMapsDir, fileName))
             numOfSelectedPatterns += 1
 
 
 if __name__ == '__main__':
     K = 5
-    data_visualization(K)
+    dynamic_datasets_path = os.path.join('..', '..')
+    data_visualization(K, dynamic_datasets_path)
+    exit()

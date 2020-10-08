@@ -2,60 +2,67 @@ import os
 import time
 from selenium import webdriver
 
+'''
+    We are usign the "Geckodriver" by Mozilla
+    https://github.com/mozilla/geckodriver/releases
+    
+    Currently usable only on Windows.
+'''
+
+# TODO - Based on the os, have the right "geckodriver"-executable. Maybe auto-download the right one..
+
+
+def saveScreenshot(driver, fileName, imagesDir, taskPath):
+    cwd = os.getcwd()  # Current Working Directory.
+    fullFilePath = os.path.join(cwd, taskPath, fileName)
+    print('Getting screenshot from: ' + fullFilePath)
+
+    fileFullPath = "file:///" + os.path.join(cwd, taskPath, fileName)
+    driver.get(fileFullPath)
+    time.sleep(2)  # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
+    fileName = fileName.replace(".html", "")
+    driver.save_screenshot(os.path.join(imagesDir, fileName + '.png'))
+
 
 def getScreenshotsFromMaps():
     cwd = os.getcwd()  # Current Working Directory.
-    driverFullPath = cwd + "/../Resources/maps/geckodriver.exe"
-    driver = webdriver.Firefox(executable_path=driverFullPath)
 
-    # task 1
-    task1Path = "../Resources/maps/task1"
+    driverDirectory = os.path.join(cwd, '..', 'Resources', 'maps', 'geckodriver')
+    driverExecutable = os.path.join(driverDirectory, 'geckodriver.exe')
+    driverLogFile = os.path.join(driverDirectory, 'geckodriver.log')
+
+    driver = webdriver.Firefox(executable_path=driverExecutable, service_log_path=driverLogFile)
+
+    task1Path = os.path.join('..', 'Resources', 'maps', 'task1')
     if os.path.isdir(task1Path):
-        imagesDir = task1Path + "/images"
+        imagesDir = os.path.join(task1Path, 'images')
         if not os.path.isdir(imagesDir):
             os.makedirs(imagesDir)
         for fileName in os.listdir(task1Path):
             if ".html" in fileName:
-                print('Getting screenshot from: ..task1/' + fileName)
-                fileFullPath = "file:///" + cwd + "/" + task1Path + "/" + fileName
-                # print fileFullPath
-                driver.get(fileFullPath)
-                time.sleep(2)  # Wait for the driver to render the html (otherwise the screenshots will be white :-P)
-                fileName = fileName.replace(".html", "")
-                driver.save_screenshot(imagesDir + "/" + fileName + '.png')
+                saveScreenshot(driver, fileName, imagesDir, task1Path)
 
-    # task 2A1
-    task2A1Path = "../Resources/maps/task2A1"
+    task2A1Path = os.path.join("..", "Resources", "maps", "task2A1")
     if os.path.isdir(task2A1Path):
         imagesDir = task2A1Path + "/images"
         if not os.path.isdir(imagesDir):
             os.makedirs(imagesDir)
         for fileName in os.listdir(task2A1Path):
             if ".html" in fileName:
-                print('Getting screenshot from: ..task2A1/' + fileName)
-                fileFullPath = "file:///" + cwd + "/" + task2A1Path + "/" + fileName
-                driver.get(fileFullPath)
-                time.sleep(2)  # Wait for the driver to render the html.
-                fileName = fileName.replace(".html", "")
-                driver.save_screenshot(imagesDir + "/" + fileName + '.png')
+                saveScreenshot(driver, fileName, imagesDir, task2A1Path)
 
-    # task 2A2
-    task2A2Path = "../Resources/maps/task2A2"
+    task2A2Path = os.path.join("..", "Resources", "maps", "task2A2")
     if os.path.isdir(task2A2Path):
-        imagesDir = task2A2Path + "/images"
+        imagesDir = os.path.join(task2A2Path, "images")
         if not os.path.isdir(imagesDir):
             os.makedirs(imagesDir)
         for fileName in os.listdir(task2A2Path):
             if ".html" in fileName:
-                print('Getting screenshot from: ..task2A2/' + fileName)
-                fileFullPath = "file:///" + cwd + "/" + task2A2Path + "/" + fileName
-                driver.get(fileFullPath)
-                time.sleep(2)  # Wait for the driver to render the html.
-                fileName = fileName.replace(".html", "")
-                driver.save_screenshot(imagesDir + "/" + fileName + '.png')
+                saveScreenshot(driver, fileName, imagesDir, task2A2Path)
 
     driver.quit()
 
 
 if __name__ == '__main__':
     getScreenshotsFromMaps()
+    exit()
