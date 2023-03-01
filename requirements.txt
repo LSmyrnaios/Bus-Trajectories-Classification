@@ -3,4 +3,4 @@ numpy==1.22.0
 gmplot==1.4.1
 selenium==3.141.0
 scipy==1.5.2
-scikit_learn==0.23.2
+scikit_learn==1.2.1
