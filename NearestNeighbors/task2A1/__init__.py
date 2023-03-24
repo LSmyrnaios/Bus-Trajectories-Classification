@@ -16,7 +16,7 @@ def findKnearestNeighbors(K, maxWarpingWindowPercentage, plotPatterns, makeListO
         if not os.path.isdir(storeMapsDir):
             os.makedirs(storeMapsDir)
 
-    dtw = Dtw(max_warping_window_percentage=maxWarpingWindowPercentage)
+    dtw = Dtw(n_neighbors=K, max_warping_window_percentage=maxWarpingWindowPercentage)
     kMins = KMins(K)
 
     sorted_nearestNeighbors_forAllTests = []

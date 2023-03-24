@@ -26,7 +26,6 @@ def data_visualization(K, dynamic_datasets_path):
     maxSecondsToWait = 120
 
     while True:
-
         if numOfSelectedPatterns == K:
             print('Finished plotting ' + K.__str__() + ' distinct random patterns.')
             break

@@ -3,7 +3,7 @@ import time
 from selenium import webdriver
 
 '''
-    We are usign the "Geckodriver" by Mozilla
+    We are using the "Geckodriver" by Mozilla
     https://github.com/mozilla/geckodriver/releases
     
     Currently usable only on Windows.
