@@ -80,7 +80,8 @@ def runLCSS(K, dynamic_datasets_path):
         kMaxs.resetArrayList()  # Reset arrayList before going to the next testSet.
 
         for i in range(0, len(sorted_subSequences)):
-            if i == 5: break
+
+            if i == K: break  # We only want the top K.
 
             print("Train " + sorted_subSequences[i][0].__str__() + ") PatternID: " \
                   + journeyPatternIDs[sorted_subSequences[i][0]].__str__() \
@@ -95,9 +96,11 @@ def runLCSS(K, dynamic_datasets_path):
                        + sorted_subSequences[i][0].__str__() + "_PatternID_" \
                        + journeyPatternIDs[sorted_subSequences[i][0]].__str__() \
                        + "-MatchingPoints_" + sorted_subSequences[i][2].__str__() + ".html"
-            GmPlot.gmPlotOfColours(full_latitudes, full_longitudes, sub_latitudes, sub_longitudes, os.path.join(storeMapsDir, fileName))
+            GmPlot.gmPlotOfColours(full_latitudes, full_longitudes, sub_latitudes, sub_longitudes,
+                                   os.path.join(storeMapsDir, fileName))
 
-    print("\nElapsed time of KNNwithLCSS for 'test_set_a2': ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins')
+    print("\nElapsed time of KNNwithLCSS for 'test_set_a2': ",
+          time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), 'mins')
 
 
 if __name__ == '__main__':

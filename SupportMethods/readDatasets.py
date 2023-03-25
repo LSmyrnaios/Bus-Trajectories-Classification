@@ -1,7 +1,7 @@
 import os
+from ast import literal_eval
 
 import pandas as pd
-from ast import literal_eval
 
 
 def read_dataset(shouldReadTrain, shouldReadTestA1, shouldReadTestA2, dynamic_datasets_path=''):

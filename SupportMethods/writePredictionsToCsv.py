@@ -1,5 +1,5 @@
-import os
 import csv
+import os
 
 
 def write_predictions_to_csv(test_data):
@@ -11,7 +11,7 @@ def write_predictions_to_csv(test_data):
         os.makedirs(dataSetsDir)
 
     fileName = os.path.join(dataSetsDir, 'testSet_categories.csv')
-    #with open(fileName, 'wb+') as csvFile:
+    # with open(fileName, 'wb+') as csvFile:
     with open(fileName, mode='w+', encoding="utf8", newline='') as csvFile:
         csvWriter = csv.writer(csvFile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csvWriter.writerow(['Test_Trip_ID'] + ['Predicted_JourneyPatternID'])  # Write headers.

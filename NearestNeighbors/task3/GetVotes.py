@@ -2,7 +2,6 @@ import operator
 
 
 def getVotes(neighborsTestsLists):
-
     testData = []
     testNum = 0
     for test in neighborsTestsLists:

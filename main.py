@@ -1,9 +1,7 @@
 import DataVisualisation
 import NearestNeighbors
 
-
 if __name__ == '__main__':
-
     K = 5
     dynamic_datasets_path = ''
 

@@ -1,6 +1,7 @@
-from sklearn.model_selection import cross_validate
 import multiprocessing
+
 import numpy as np
+from sklearn.model_selection import cross_validate
 
 
 def get_scores_from_cross_validation(clf, vector_train, train_y):

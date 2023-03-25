@@ -1,6 +1,3 @@
-
-
-
 class K_arrayList:
     '''
         Later make it the parent class from which the sub-classes will be inherited.

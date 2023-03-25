@@ -1,5 +1,6 @@
 import os
 import time
+
 from selenium import webdriver
 
 '''
@@ -8,6 +9,7 @@ from selenium import webdriver
     
     Currently usable only on Windows.
 '''
+
 
 # TODO - Based on the os, have the right "geckodriver"-executable. Maybe auto-download the right one..
 

@@ -23,4 +23,3 @@ if __name__ == '__main__':
     dynamic_datasets_path = '../'
     runA1andA2(K, dynamic_datasets_path)
     exit()
-

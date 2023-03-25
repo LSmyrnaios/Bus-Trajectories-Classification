@@ -20,13 +20,12 @@ def haversine(lon1, lat1, lon2, lat2):
     c = 2 * asin(sqrt(a))
     r = 6371  # Radius of earth in kilometers. Use 3956 for miles
     distance = c * r
-    #print "Calculating distance between (lon1, lat1)", lon1, lat1, " and (lon2, lat2)", lon2, lat2, ". Distance: ", distance, "\n"
+    # print "Calculating distance between (lon1, lat1)", lon1, lat1, " and (lon2, lat2)", lon2, lat2, ". Distance: ", distance, "\n"
     # wait = input("PRESS ENTER TO CONTINUE.")
     return distance
 
 
 if __name__ == '__main__':
-
     # Calculating distance between (lon1, lat1) -0.110302801597 0.930497960811  and (lon2, lat2) -0.112078447219 0.929978184306. Distance:  7.52834891357
     lon1 = -0.110302801597
     lat1 = 0.930497960811

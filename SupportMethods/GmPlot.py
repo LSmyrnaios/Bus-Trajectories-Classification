@@ -9,7 +9,6 @@ import numpy as np
 
 
 def gmPlot(latitudes, longitudes, FullFilePath, zoom=12):
-
     gmap = gmplot.GoogleMapPlotter(np.mean(latitudes).__float__(), np.mean(longitudes).__float__(), zoom)
 
     gmap.plot(latitudes, longitudes, 'cornflowerblue', edge_width=10)
@@ -18,12 +17,9 @@ def gmPlot(latitudes, longitudes, FullFilePath, zoom=12):
 
 
 def gmPlotOfColours(fullLats, fullLongs, subLats, subLongs, FullFilePath, zoom=12):
-
     gmap = gmplot.GoogleMapPlotter(np.mean(fullLats).__float__(), np.mean(fullLongs).__float__(), zoom)
 
     gmap.plot(fullLats, fullLongs, 'green', edge_width=10)  # All green
     gmap.plot(subLats, subLongs, 'red', edge_width=10)  # Subsequence RED
 
     gmap.draw(FullFilePath)
-
-

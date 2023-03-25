@@ -1,4 +1,3 @@
-
 class KMaxs:
 
     def __init__(self, K):
@@ -6,7 +5,6 @@ class KMaxs:
         self.k_maxs_arrayList = []
         self.min_length_index = 0
         self.arrayListLength = 0
-
 
     def setMinIndexOfArrayList(self):
         self.min_length_index = 0
@@ -16,11 +14,10 @@ class KMaxs:
                 new_min_length = self.k_maxs_arrayList[i][2]
                 self.min_length_index = i
 
-
     def checkMinLengthAndInsert(self, new_triple):
         if self.arrayListLength < self.K:   # Fill the array
             self.k_maxs_arrayList.append(new_triple)
-            #print 'Filling the array with Cost: ' + self.k_mins_array[self.arrayLength][2].__str__()
+            # print 'Filling the array with Cost: ' + self.k_mins_array[self.arrayLength][2].__str__()
             self.arrayListLength += 1
             if self.arrayListLength == self.K:  # When finished appending, set the max_index for later check.
                 self.setMinIndexOfArrayList()
@@ -31,11 +28,9 @@ class KMaxs:
                 self.k_maxs_arrayList[self.min_length_index] = new_triple
                 self.setMinIndexOfArrayList()
 
-
     def getArrayList(self):
         return self.k_maxs_arrayList
 
-
     def resetArrayList(self):
-        del self.k_maxs_arrayList[:]    # Delete the arrayList
-        self.arrayListLength = 0    # Set length to zero. This is important, as we use this variable instead of taking the len() each time!
+        del self.k_maxs_arrayList[:]  # Delete the arrayList
+        self.arrayListLength = 0  # Set length to zero. This is important, as we use this variable instead of taking the len() each time!

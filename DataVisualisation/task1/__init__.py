@@ -1,17 +1,17 @@
 import os
 import random
 import time
+
 from SupportMethods import GetCoordinates, readDatasets, TrainData, GmPlot
 
 
 def data_visualization(K, dynamic_datasets_path):
-
     print("Going to visualize bus-trajectories..")
     dataSets = readDatasets.read_dataset(True, False, False, dynamic_datasets_path)
     trainSet = dataSets[0]
 
-    #print trainSet.shape[0]  # DEBUG!
-    #print trainSet['Trajectory']  # DEBUG!
+    # print trainSet.shape[0]  # DEBUG!
+    # print trainSet['Trajectory']  # DEBUG!
 
     journeyPatternIDs, trainTrajs, trainListSize = TrainData.getListsOfTrainData(trainSet)
 
@@ -33,7 +33,7 @@ def data_visualization(K, dynamic_datasets_path):
             print('The program could not find ' + K.__str__() + ' distinct random patterns in the specified time: ' + maxSecondsToWait.__str__())
             break
 
-        randomTrain = random.randint(0, trainListSize-1)
+        randomTrain = random.randint(0, trainListSize - 1)
         curPatternID = journeyPatternIDs[randomTrain]
         if curPatternID not in selectedPatternIDs:
             selectedPatternIDs.append(curPatternID)

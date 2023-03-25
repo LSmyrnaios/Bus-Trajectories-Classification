@@ -1,17 +1,20 @@
 import os
 
 from NearestNeighbors.task2A1 import findKnearestNeighbors
-from SupportMethods import readDatasets
 from NearestNeighbors.task3.GetVotes import getVotes
+from SupportMethods import readDatasets
 
 
-def crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds):
+def crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds=10):
     accuracies = []
     subset_size = int(len(trainSet) / num_folds)
+    accuracy = 0
 
     for i in range(num_folds):
 
-        testing_this_round = trainSet[i * subset_size:][:subset_size]
+        print("cross-validation: " + (i + 1).__str__())
+
+        testing_this_round = trainSet[i * subset_size:][:subset_size]  # TODO - This is huge!
         training1 = trainSet[0:][:subset_size * i]
         training2 = trainSet[(i + 1) * subset_size:][:subset_size * (10 - i - 1)]
 
@@ -31,9 +34,8 @@ def crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds):
         print(testData)
 
         correct = 0
-        i = 0
-        for row in trainSet['journeyPatternId']:
-            if i == 100:
+        for j, row in enumerate(trainSet['journeyPatternId']):
+            if j == 100:
                 break
             try:
                 print("Predicted: ", testData[i][1], ' - ', "Actual: ", row)
@@ -41,11 +43,10 @@ def crossValidation(trainSet, K, maxWarpingWindowPercentage, num_folds):
                     correct += 1
             except IndexError:
                 break
-            i += 1
 
         print('Correct predictions: ', correct)
         accuracy = float(correct) / 100
-        print('Accuacy: ', accuracy)
+        print('Accuracy: ', accuracy)
 
     return accuracy
 
