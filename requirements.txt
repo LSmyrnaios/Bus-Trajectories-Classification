@@ -1,5 +1,5 @@
 pandas==2.0.2
-numpy==1.24.3
+numpy==1.25.2
 gmplot==1.4.1
 selenium==4.9.1
 scipy==1.10.1
